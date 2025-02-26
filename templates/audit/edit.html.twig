@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Audit{% endblock %}
+
+{% block body %}
+    <h1>Edit Audit</h1>
+
+    {{ include('audit/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_audit_index') }}">back to list</a>
+
+    {{ include('audit/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Opération de contrôle{% endblock %}
+
+{% block body %}
+    <h1>Opération de contrôle</h1>
+
+    <nav>
+        <button type="button" class="tab-button" data-tab="informations">Informations</button>
+        <button type="button" class="tab-button" data-tab="operations">Opérations</button>
+        <button type="button" class="tab-button" data-tab="resultats">Résultats</button>
+        <hr>
+    </nav>
+
+    {{ form_start(form) }}
+
+    <div class="tab-content informations active">
+        {{ form_row(form.site) }}
+        {{ form_row(form.zone) }}
+        {{ form_row(form.date_heure_audit) }}
+        {{ form_row(form.auditeur) }}
+
+        <button type="button">Opérations</button>
+        <hr>
+    </div>
+
+    <div class="tab-content operations">
+    {% set totalVerifications = 0 %}
+    {% set score = 0 %}
+        {% for verification in form.verifications %}
+
+            <div class="operation-item">
+                {{ verification.vars.data.operation.nom }}
+                {{ form_row(verification.est_conforme) }}
+                {{ form_row(verification.commentaire) }}
+            </div>
+            {% set totalVerifications = (totalVerifications + 1) %}
+        {% endfor %}
+
+        {{ totalVerifications }}
+    
+        <button type="button">Résultats</button>
+        <hr>
+    </div>
+
+    <div class="tab-content resultats">
+        <p>Graphique score de conformité</p>
+    </div>
+
+    <button type="submit">Envoyer</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_audit_index') }}">back to list</a>
+
+    <style>
+    .tab-content{
+        display: none;
+    }
+
+    .tab-content.active{
+        display: block;
+    }
+    
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const buttons = document.querySelectorAll('.tab-button');
+        const contents = document.querySelectorAll('.tab-content');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function(){
+                contents.forEach(content => content.classList.remove('active'));
+                const tab = this.getAttribute('data-tab');
+                document.querySelector('.' + tab).classList.add('active');
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

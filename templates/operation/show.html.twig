@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Operation{% endblock %}
+
+{% block body %}
+    <h1>Operation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ operation.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ operation.description }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ operation.nom }}</td>
+            </tr>
+            <tr>
+                <th>Support</th>
+                <td>{{ operation.support }}</td>
+            </tr>
+            <tr>
+                <th>Est_actif</th>
+                <td>{{ operation.estActif ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Critere</th>
+                <td>{{ operation.critere }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_operation_index') }}">back to list</a>
+
+    <a href="{{ path('app_operation_edit', {'id': operation.id}) }}">edit</a>
+
+    {{ include('operation/_delete_form.html.twig') }}
+{% endblock %}
