@@ -20,37 +20,42 @@
         {{ form_row(form.date_heure_audit) }}
         {{ form_row(form.auditeur) }}
 
-        <button type="button">Opérations</button>
+        <button type="button" class="tab-button" data-tab="operations">Opérations</button>
         <hr>
     </div>
 
     <div class="tab-content operations">
-    {% set totalVerifications = 0 %}
-    {% set score = 0 %}
         {% for verification in form.verifications %}
-
             <div class="operation-item">
                 {{ verification.vars.data.operation.nom }}
                 {{ form_row(verification.est_conforme) }}
-                {{ form_row(verification.commentaire) }}
-            </div>
-            {% set totalVerifications = (totalVerifications + 1) %}
-        {% endfor %}
+                <div class="comment-div">
+                    {{ form_label(verification.commentaire) }} 
+                    {{ form_widget(verification.commentaire) }}
+                    {{ form_label(verification.photo) }} 
+                    {{ form_widget(verification.photo) }} 
+                    {% if verification.vars.data.photo %}
+                        <img src="{{ asset('uploads/' ~ verification.vars.data.photo) }}" alt="Photo de la vérification" width="150">
+                    {% endif %}
+                </div>
 
-        {{ totalVerifications }}
+            </div>
+        {% endfor %}
     
-        <button type="button">Résultats</button>
+        <button type="button" class="tab-button" data-tab="resultats">Résultats</button>
         <hr>
     </div>
 
     <div class="tab-content resultats">
+        <p>Score de conformité : <span id="score_affichage">0</span>%</p>
+        {{ form_widget(form.score_conformite) }}
+        <canvas id="chart"></canvas>
         <p>Graphique score de conformité</p>
     </div>
 
     <button type="submit">Envoyer</button>
     {{ form_end(form) }}
 
-    <a href="{{ path('app_audit_index') }}">back to list</a>
 
     <style>
     .tab-content{
@@ -60,6 +65,14 @@
     .tab-content.active{
         display: block;
     }
+
+    .comment-div{
+        display: none;
+    }
+    #chart{
+        max-width: 400px;
+        max-height: 400px;
+    }
     
     </style>
 {% endblock %}
@@ -68,8 +81,13 @@
 
 {{ parent() }}
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
+
     document.addEventListener('DOMContentLoaded', function(){
+
+        // Affichage des onglets
         const buttons = document.querySelectorAll('.tab-button');
         const contents = document.querySelectorAll('.tab-content');
 
@@ -80,6 +98,91 @@
                 document.querySelector('.' + tab).classList.add('active');
             });
         });
+
+        // Affichage des commentaires
+        function showComment(){
+            document.querySelectorAll('.operation-item').forEach(item => {
+                const radioInputs = item.querySelectorAll('input[type="radio"]');
+                const commentDiv = item.querySelector('.comment-div');
+
+                radioInputs.forEach(input => {
+                    if(input.checked && input.value === '0') {
+                        commentDiv.style.display = 'block';
+                    }
+                });
+
+                radioInputs.forEach(input => {
+                    input.addEventListener('change', function() {
+                        if(this.value === '0'){
+                            commentDiv.style.display = 'block';
+                        } else {
+                            commentDiv.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+        showComment();
+
+
+        // Création du graphique 
+        const scoreAffichage = document.getElementById('score_affichage');
+        const scoreInput = document.getElementById('audit_score_conformite');
+        const ctx = document.getElementById('chart').getContext('2d');
+
+        let chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Conforme', 'Non conforme'],
+                datasets: [{
+                    data: [100, 0],
+                    backgroundColor: ['#000000', '#cacaca'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        })
+
+        //Calcul du score de conformité
+        function updateScore(){
+            let totalVerifications = 0;
+            let conformes = 0;
+
+            document.querySelectorAll('.operation-item').forEach(item => {
+                const radios = item.querySelectorAll('input[type="radio"]');
+                let selectedValue = null;
+
+                radios.forEach(radio => {
+                    if(radio.checked) {
+                        selectedValue = radio.value;
+                    }
+                });
+
+                if(selectedValue !== null){
+                    totalVerifications++;
+                    if(selectedValue === '1'){
+                        conformes++;
+                    }
+                }
+            });
+
+            let score = totalVerifications > 0 ? (conformes / totalVerifications) * 100 : 0;
+            scoreInput.value = score.toFixed(2);
+            scoreAffichage.innerText = score.toFixed(2);
+
+            chart.data.datasets[0].data = [score, 100 - score];
+            chart.update();
+        }
+
+        document.querySelectorAll('.operation-item input[type="radio"]').forEach(input => {
+            input.addEventListener('change', updateScore);
+        });
+
+        updateScore();
+       
+
     });
 </script>
 

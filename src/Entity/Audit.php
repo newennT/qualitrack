@@ -40,6 +40,7 @@ class Audit
     public function __construct()
     {
         $this->verifications = new ArrayCollection();
+        $this->date_heure_audit = new \DateTime();
     }
 
     public function getId(): ?int

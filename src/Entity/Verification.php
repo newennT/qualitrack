@@ -26,6 +26,9 @@ class Verification
     #[ORM\ManyToOne(inversedBy: 'verifications')]
     private ?Audit $audit = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class Verification
     public function setAudit(?Audit $audit): static
     {
         $this->audit = $audit;
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): static
+    {
+        $this->photo = $photo;
 
         return $this;
     }

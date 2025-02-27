@@ -21,7 +21,8 @@ class AuditType extends AbstractType
         $builder
             ->add('date_heure_audit', DateTimeType::class, [
                 'widget' => 'single_text',
-                'label' => 'Date et heure'
+                'label' => 'Date et heure',
+                'data' => new \DateTime()
             ])
             ->add('zone', TextType::class, [
                 'label' => 'Zone'
@@ -42,6 +43,10 @@ class AuditType extends AbstractType
                 'by_reference' => false,
                 'label' => 'Vérifications',
                 'prototype' => true
+            ])
+            ->add('score_conformite', NumberType::class, [
+                'attr' => ['style' => 'display: none;'],
+                'label' => false
             ])
         ;
     }
