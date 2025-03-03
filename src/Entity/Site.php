@@ -6,6 +6,7 @@ use App\Repository\SiteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SiteRepository::class)]
 class Site
@@ -19,6 +20,8 @@ class Site
     private ?string $nom_site = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Email()]
+    #[Assert\NotBlank()]
     private ?string $mail_contact = null;
 
     /**

@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class SiteType extends AbstractType
 {
@@ -16,8 +17,8 @@ class SiteType extends AbstractType
             ->add('nom_site', TextType::class, [
                 'label' => 'Nom du site',
             ])
-            ->add('mail_contact', TextType::class, [
-                'label' => 'Nom du site',
+            ->add('mail_contact', EmailType::class, [
+                'label' => 'Email du contact',
             ])
         ;
     }

@@ -24,7 +24,7 @@
             <tr>
                 <td>{{ audit.id }}</td>
                 <td>{{ audit.dateHeureAudit ? audit.dateHeureAudit|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ audit.scoreConformite }}</td>
+                <td>{{ audit.scoreConformite }}%</td>
                 <td>{{ audit.zone }}</td>
                 <td>
                     <a href="{{ path('app_audit_show', {'id': audit.id}) }}">show</a>
@@ -39,5 +39,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_audit_new') }}">Create new</a>
 {% endblock %}

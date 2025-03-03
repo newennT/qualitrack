@@ -4,31 +4,75 @@
 
 {% block body %}
     <h1>Audit</h1>
+    <h2>Informations</h2>
+    <p>{{ audit.site.getNomSite }}</p>
+    <p>{{ audit.zone }}</p>
+    <p>{{ audit.dateHeureAudit|date('Y-m-d H:i:s') }}</p>
+    <p>{{ audit.auditeur.getNom }} {{ audit.auditeur.getPrenom }}</p>
+    
+    <h2>Opérations</h2>
+    {% for verification in audit.verifications %}
+    <div>
+        {% if verification.isEstConforme == true %}
+        <p>Conforme</p>
+        {% else %}
+        <p>Non conforme</p>
+        {{ verification.commentaire }}
+        <img src="{{ asset('uploads/' ~ verification.photo) }}" alt="Photo de la vérification" width="150">
+        {% endif %}
+    </div>
+    {% endfor %}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ audit.id }}</td>
-            </tr>
-            <tr>
-                <th>Date_heure_audit</th>
-                <td>{{ audit.dateHeureAudit ? audit.dateHeureAudit|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Score_conformite</th>
-                <td>{{ audit.scoreConformite }}</td>
-            </tr>
-            <tr>
-                <th>Zone</th>
-                <td>{{ audit.zone }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <h2>Résultats</h2>
+
+    <canvas id="chart"></canvas>
+    <p>{{ audit.scoreConformite }}%</p>
+
+
 
     <a href="{{ path('app_audit_index') }}">back to list</a>
 
     <a href="{{ path('app_audit_edit', {'id': audit.id}) }}">edit</a>
 
     {{ include('audit/_delete_form.html.twig') }}
+
+<style>
+    #chart{
+        max-width: 400px;
+        max-height: 400px;
+    }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+
+const ctx = document.getElementById('chart').getContext('2d');
+let conforme = {{ audit.scoreConformite }};
+let nonConforme = 100 - conforme;
+
+//////////// Création du graphique
+        let chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Conforme', 'Non conforme'],
+                datasets: [{
+                    data: [conforme, nonConforme],
+                    backgroundColor: ['#000000', '#cacaca'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        })
+})
+</script>
 {% endblock %}
