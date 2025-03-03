@@ -33,5 +33,9 @@
         </tbody>
     </table>
 
+    <div class="pagination">   
+        {{ knp_pagination_render(sites) }}
+    </div>
+
     <a href="{{ path('app_site_new') }}">Create new</a>
 {% endblock %}

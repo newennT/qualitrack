@@ -41,7 +41,6 @@ class AuditType extends AbstractType
                 'entry_type' => VerificationType::class,
                 'allow_add' => true,
                 'by_reference' => false,
-                'label' => 'Vérifications',
                 'prototype' => true
             ])
             ->add('score_conformite', NumberType::class, [

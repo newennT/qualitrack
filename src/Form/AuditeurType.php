@@ -14,10 +14,10 @@ class AuditeurType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, [
-                'label' => 'Zone'
+                'label' => 'Nom'
             ])
             ->add('prenom', TextType::class, [
-                'label' => 'Zone'
+                'label' => 'Prénom'
             ])
         ;
     }

@@ -11,16 +11,25 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[IsGranted('IS_AUTHENTICATED')]
 #[Route('/admin/site')]
 final class SiteController extends AbstractController
 {
     #[Route(name: 'app_site_index', methods: ['GET'])]
-    public function index(SiteRepository $siteRepository): Response
+    public function index(SiteRepository $siteRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $query = $siteRepository->createQueryBuilder('a')
+            ->orderBy('a.nom_site', 'ASC')
+            ->getQuery();
+        $sites = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
         return $this->render('site/index.html.twig', [
-            'sites' => $siteRepository->findAll(),
+            'sites' => $sites,
         ]);
     }
 

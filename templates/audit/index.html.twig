@@ -29,6 +29,7 @@
                 <td>
                     <a href="{{ path('app_audit_show', {'id': audit.id}) }}">show</a>
                     <a href="{{ path('app_audit_edit', {'id': audit.id}) }}">edit</a>
+                    <a href="#">Générer PDF</a>
                 </td>
             </tr>
         {% else %}
@@ -36,7 +37,13 @@
                 <td colspan="5">no records found</td>
             </tr>
         {% endfor %}
+
         </tbody>
     </table>
+    <div class="pagination">   
+        {{ knp_pagination_render(audits) }}
+    </div>
+
+    
 
 {% endblock %}

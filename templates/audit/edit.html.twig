@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Edit Audit</h1>
 
-    {{ form_start(form) }}
+   {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 
     <div class="informations active">
         {{ form_row(form.site) }}
@@ -45,6 +45,8 @@
         <canvas id="chart"></canvas>
         <p>Graphique score de conformité</p>
     </div>
+    <button type="submit">Envoyer</button>
+    {{ form_end(form) }}
 
     <a href="{{ path('app_audit_index') }}">back to list</a>
 

@@ -11,19 +11,29 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Knp\Component\Pager\PaginatorInterface;
+use App\Service\PdfGeneratorService;
 
 #[IsGranted('IS_AUTHENTICATED')]
 #[Route('/admin')]
 final class AuditController extends AbstractController
 {
     #[Route(name: 'app_audit_index', methods: ['GET'])]
-    public function index(AuditRepository $auditRepository): Response
+    public function index(AuditRepository $auditRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $query = $auditRepository->createQueryBuilder('a')
+            ->orderBy('a.date_heure_audit', 'DESC') 
+            ->getQuery();
+        $audits = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+
         return $this->render('audit/index.html.twig', [
-            'audits' => $auditRepository->findAll(),
+            'audits' => $audits,
         ]);
     }
-
     
 
     #[Route('/audit/{id}', name: 'app_audit_show', methods: ['GET'])]
@@ -61,5 +71,19 @@ final class AuditController extends AbstractController
         }
 
         return $this->redirectToRoute('app_audit_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/audit/{id}/pdf', name: 'app_audit_pdf')]
+    public function output(Audit $audit, PdfGeneratorService $pdfGeneratorService): Response
+    {
+        $html = $this->renderView('audit/pdf.html.twig', [
+            'audit' => $audit,
+        ]);
+
+        $content = $pdfGeneratorService->getPdf($html);
+
+        return new Response($content, 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 }

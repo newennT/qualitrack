@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Audit n°{{ audit.id }}</title>
+</head>
+<body>
+<h1>Audit</h1>
+    <h2>Informations</h2>
+    <p>{{ audit.site.getNomSite }}</p>
+    <p>{{ audit.zone }}</p>
+    <p>{{ audit.dateHeureAudit|date('Y-m-d H:i:s') }}</p>
+    <p>{{ audit.auditeur.getNom }} {{ audit.auditeur.getPrenom }}</p>
+    
+    <h2>Opérations</h2>
+    {% for verification in audit.verifications %}
+    <div>
+        {{ verification.operation.nom}}
+        {% if verification.isEstConforme == true %}
+        <p>Conforme</p>
+        {% else %}
+        <p>Non conforme :<br>
+        {{ verification.commentaire }}</p>
+        <div>
+            <img src="{{ absolute_url(asset('uploads/' ~ verification.photo)) }}" alt="Photo de la vérification" width="150">
+        </div>        
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <h2>Résultats</h2>
+
+    <p>{{ audit.scoreConformite }}%</p>
+    
+</body>
+</html>
