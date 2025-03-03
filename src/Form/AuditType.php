@@ -29,12 +29,12 @@ class AuditType extends AbstractType
             ])
             ->add('auditeur', EntityType::class, [
                 'class' => Auditeur::class,
-                'choice_label' => 'id',
+                'choice_label' => function (Auditeur $auditeur) { return $auditeur->getNom() . ' ' . $auditeur->getPrenom(); },
                 'label' => 'Auditeur'
             ])
             ->add('site', EntityType::class, [
                 'class' => Site::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom_site',
                 'label' => 'Site'
             ])
             ->add('verifications', CollectionType::class, [

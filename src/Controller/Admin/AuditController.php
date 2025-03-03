@@ -10,8 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/admin/audit')]
+#[IsGranted('IS_AUTHENTICATED')]
+#[Route('/admin')]
 final class AuditController extends AbstractController
 {
     #[Route(name: 'app_audit_index', methods: ['GET'])]
@@ -24,7 +26,7 @@ final class AuditController extends AbstractController
 
     
 
-    #[Route('/{id}', name: 'app_audit_show', methods: ['GET'])]
+    #[Route('/audit/{id}', name: 'app_audit_show', methods: ['GET'])]
     public function show(Audit $audit): Response
     {
         return $this->render('audit/show.html.twig', [
@@ -32,7 +34,7 @@ final class AuditController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_audit_edit', methods: ['GET', 'POST'])]
+    #[Route('/audit/{id}/edit', name: 'app_audit_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Audit $audit, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(AuditType::class, $audit);
@@ -50,7 +52,7 @@ final class AuditController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_audit_delete', methods: ['POST'])]
+    #[Route('/audit/{id}', name: 'app_audit_delete', methods: ['POST'])]
     public function delete(Request $request, Audit $audit, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$audit->getId(), $request->getPayload()->getString('_token'))) {

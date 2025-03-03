@@ -34,7 +34,7 @@ class Audit
     /**
      * @var Collection<int, Verification>
      */
-    #[ORM\OneToMany(targetEntity: Verification::class, mappedBy: 'audit')]
+    #[ORM\OneToMany(targetEntity: Verification::class, mappedBy: 'audit', cascade: ['persist', 'remove'])]
     private Collection $verifications;
 
     public function __construct()

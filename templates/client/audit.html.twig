@@ -125,11 +125,13 @@
         showComment();
 
 
-        // Création du graphique 
+        //Affichage du résultat
+         
         const scoreAffichage = document.getElementById('score_affichage');
         const scoreInput = document.getElementById('audit_score_conformite');
         const ctx = document.getElementById('chart').getContext('2d');
 
+        //////////// Création du graphique
         let chart = new Chart(ctx, {
             type: 'pie',
             data: {
@@ -145,7 +147,7 @@
             }
         })
 
-        //Calcul du score de conformité
+        /////////////////Calcul du score de conformité
         function updateScore(){
             let totalVerifications = 0;
             let conformes = 0;
@@ -160,7 +162,7 @@
                     }
                 });
 
-                if(selectedValue !== null){
+                if(selectedValue !== null && selectedValue !== ''){
                     totalVerifications++;
                     if(selectedValue === '1'){
                         conformes++;
