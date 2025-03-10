@@ -16,12 +16,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use App\Service\PdfGeneratorService;
+use App\Service\MailerService;
 
 
 final class AuditController extends AbstractController
 {
     #[Route('/', name: 'app_audit_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, OperationRepository $operationRepository, SluggerInterface $slugger, PdfGeneratorService $pdfGeneratorService): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, OperationRepository $operationRepository, SluggerInterface $slugger, PdfGeneratorService $pdfGeneratorService, MailerService $mailerService): Response
     {
         $audit = new Audit();
         $audit->setDateHeureAudit(new \DateTime());
@@ -61,14 +62,25 @@ final class AuditController extends AbstractController
             $entityManager->persist($audit);
             $entityManager->flush();
 
+            // Génération du pdf
             $html = $this->renderView('audit/pdf.html.twig', [
                 'audit' => $audit,
             ]);
             $pdfContent = $pdfGeneratorService->getPdf($html);
-            
+
             $pdfFileName = 'audit-' . $audit->getId() . '.pdf';
             $pdfFilePath = $this->getParameter('pdf_directory') . '/' . $pdfFileName;
             file_put_contents($pdfFilePath, $pdfContent);
+
+            // Envoi du mail avec le pdf
+            if ($audit->getSite() && $audit->getSite()->getMailContact()){
+                $mailerService->sendAudit(
+                    $audit->getSite()->getMailContact(),
+                    'Audit de ' . $audit->getSite()->getNomSite() . " (" . $audit->getZone() . ") par " . $audit->getAuditeur()->getNom() . " " . $audit->getAuditeur()->getPrenom(),
+                    'Audit conforme à ' . $audit->getScoreConformite() . "%",
+                    $pdfFilePath
+                );
+            }
 
             return $this->redirectToRoute('app_audit_validation', [], Response::HTTP_SEE_OTHER);
         }

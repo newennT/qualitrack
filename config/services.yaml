@@ -7,6 +7,12 @@ parameters:
     upload_directory: '%kernel.project_dir%/public/uploads'
     pdf_directory: '%kernel.project_dir%/public/pdf'
 
+    mailer_host: 'ssl0.ovh.net'
+    mailer_port: 465
+    mailer_username: 'rony@solatypic.com'
+    mailer_password: 'ronynou35800'
+    mailer_from: 'rony@solatypic.com'
+
 services:
     # default configuration for services in *this* file
     _defaults:
