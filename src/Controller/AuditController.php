@@ -15,12 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use App\Service\PdfGeneratorService;
 
 
 final class AuditController extends AbstractController
 {
     #[Route('/', name: 'app_audit_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, OperationRepository $operationRepository, SluggerInterface $slugger): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, OperationRepository $operationRepository, SluggerInterface $slugger, PdfGeneratorService $pdfGeneratorService): Response
     {
         $audit = new Audit();
         $audit->setDateHeureAudit(new \DateTime());
@@ -60,13 +61,22 @@ final class AuditController extends AbstractController
             $entityManager->persist($audit);
             $entityManager->flush();
 
+            $html = $this->renderView('audit/pdf.html.twig', [
+                'audit' => $audit,
+            ]);
+            $pdfContent = $pdfGeneratorService->getPdf($html);
+            
+            $pdfFileName = 'audit-' . $audit->getId() . '.pdf';
+            $pdfFilePath = $this->getParameter('pdf_directory') . '/' . $pdfFileName;
+            file_put_contents($pdfFilePath, $pdfContent);
+
             return $this->redirectToRoute('app_audit_validation', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('client/audit.html.twig', [
             'audit' => $audit,
             'form' => $form,
-        ]);
+        ]); 
     }
 
     
