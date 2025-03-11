@@ -17,6 +17,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use App\Service\PdfGeneratorService;
 use App\Service\MailerService;
+use Symfony\Component\Form\FormError;
 
 
 final class AuditController extends AbstractController
@@ -36,11 +37,17 @@ final class AuditController extends AbstractController
             $audit->addVerification($verification);
         }
 
-        $form = $this->createForm(AuditType::class, $audit);
+        $form = $this->createForm(AuditType::class, $audit, [
+            'validation_groups' => ['Default', 'verifier_commentaire'],
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             foreach($form->get('verifications') as $verificationForm){
+                $verificationData = $verificationForm->getData();
+
                 $photoFile = $verificationForm->get('photo')->getData();
                 if($photoFile){
                     $originalFileName = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);

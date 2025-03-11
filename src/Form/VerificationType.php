@@ -13,6 +13,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class VerificationType extends AbstractType
 {
@@ -26,7 +27,7 @@ class VerificationType extends AbstractType
                 'multiple' => false,
                 'placeholder' => false,
                 'choices'  => [
-                    'Ignorer' => '',
+                    'Ignorer' => 'null',
                     'Oui' => true,
                     'Non' => false,
                 ],
@@ -34,6 +35,9 @@ class VerificationType extends AbstractType
             ->add('commentaire', TextareaType::class, [
                 'label' => 'Commentaire',
                 'required' => false,
+                'constraints' => [
+                    new NotBlank(['groups' => ['verifier_commentaire']]),
+                ],
             ])
             ->add('photo', FileType::class, [
                 'mapped' => false,
@@ -44,7 +48,8 @@ class VerificationType extends AbstractType
                         'maxSize' => '5M',
                         'mimeTypes' => ['image/jpeg', 'image/png'],
                         'mimeTypesMessage' => 'Veuillez télécharger une image JPG ou PNG',
-                    ])
+                    ]),
+                    new NotBlank(['groups' => ['verifier_photo']])
                 ]
             ])
         ;

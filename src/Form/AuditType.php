@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormInterface;
 
 class AuditType extends AbstractType
 {
@@ -41,7 +42,13 @@ class AuditType extends AbstractType
                 'entry_type' => VerificationType::class,
                 'allow_add' => true,
                 'by_reference' => false,
-                'prototype' => true
+                'prototype' => true,
+                'entry_options' => [
+                    'validation_groups' => function(FormInterface $form) {
+                        $verification = $form->getData();
+                        return $verification && !$verification->isEstConforme() ? ['Default', 'verifier_commentaire', 'verifier_photo'] : ['Default'];
+                    }
+                ]
             ])
             ->add('score_conformite', NumberType::class, [
                 'attr' => ['style' => 'display: none;'],

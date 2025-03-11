@@ -14,6 +14,17 @@
 
     {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 
+        {% if form.vars.errors|length > 0 %}
+            <div class="error-messages">
+                <p>Il y a des erreurs dans le formulaire. Veuillez les corriger avant de soumettre.</p>
+                <ul>
+                    {% for error in form.vars.errors %}
+                        <li>{{ error.message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
     <div class="tab-content informations active">
         {{ form_row(form.site) }}
         {{ form_row(form.zone) }}
@@ -29,11 +40,38 @@
             <div class="operation-item">
                 {{ verification.vars.data.operation.nom }}
                 {{ form_row(verification.est_conforme) }}
+
+                {% if verification.est_conforme.vars.errors|length > 0 %}
+                    <div class="error-messages">
+                        {% for error in verification.est_conforme.vars.errors %}
+                            <p>{{ error.message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
                 <div class="comment-div">
                     {{ form_label(verification.commentaire) }} 
                     {{ form_widget(verification.commentaire) }}
+
+                    {% if verification.commentaire.vars.errors|length > 0 %}
+                        <div class="error-messages">
+                            {% for error in verification.commentaire.vars.errors %}
+                                <p>Le commentaire ne peut pas être vide quand la vérification n'est pas conforme.</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
                     {{ form_label(verification.photo) }} 
-                    {{ form_widget(verification.photo) }} 
+                    {{ form_widget(verification.photo) }}
+
+                    {% if verification.photo.vars.errors|length > 0 %}
+                        <div class="error-messages">
+                            {% for error in verification.photo.vars.errors %}
+                                <p>La photo ne peut pas être vide quand la vérification n'est pas conforme.</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
                     {% if verification.vars.data.photo %}
                         <img src="{{ asset('uploads/' ~ verification.vars.data.photo) }}" alt="Photo de la vérification" width="150">
                     {% endif %}
@@ -66,9 +104,9 @@
         display: block;
     }
 
-    .comment-div{
+    {# .comment-div{
         display: none;
-    }
+    } #}
     #chart{
         max-width: 400px;
         max-height: 400px;
