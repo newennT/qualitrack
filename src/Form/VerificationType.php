@@ -25,9 +25,8 @@ class VerificationType extends AbstractType
                 'required' => false,
                 'expanded' => true,
                 'multiple' => false,
-                'placeholder' => false,
+                'placeholder' => 'Ignorer',
                 'choices'  => [
-                    'Ignorer' => 'null',
                     'Oui' => true,
                     'Non' => false,
                 ],
