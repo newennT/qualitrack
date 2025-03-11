@@ -2,47 +2,42 @@
 
 namespace App\Service;
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Attachment;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class MailerService
 {
-    private PHPMailer $phpMailer;
+    private MailerInterface $mailer;
     private ParameterBagInterface $params;
 
-    public function __construct(ParameterBagInterface $params)
+    public function __construct(MailerInterface $mailer, ParameterBagInterface $params)
     {
         $this->params = $params;
-        $this->mailer = new PHPMailer(true);
-        
-        $this->mailer->CharSet = PHPMailer::CHARSET_UTF8;
-        $this->mailer->isSMTP();
-        $this->mailer->Host = $this->params->get('mailer_host');
-        $this->mailer->SMTPAuth = true;
-        $this->mailer->Username = $this->params->get('mailer_username');
-        $this->mailer->Password = $this->params->get('mailer_password');
-        $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $this->mailer->Port = $this->params->get('mailer_port');
-        $this->mailer->setFrom($this->params->get('mailer_from'), 'Sicomen');
+        $this->mailer = $mailer;
     }
 
-    public function sendAudit(string $sendTo, string $subject, string $body, string $attachmentPath = null): bool 
+    public function sendAudit(string $sendTo, string $subject, string $body, string $attachmentPath = null): bool
     {
         try {
-            $this->mailer->clearAddresses();
-            $this->mailer->addAddress($sendTo);
-            $this->mailer->isHTML(true);
-            $this->mailer->Subject = $subject;
-            $this->mailer->Body = $body;
+            $email = (new Email())
+                ->from(new Address($this->params->get('mailer_from'), 'Sicomen'))
+                ->to($sendTo)
+                ->subject($subject)
+                ->html($body);
 
             if ($attachmentPath && file_exists($attachmentPath)) {
-                $this->mailer->addAttachment($attachmentPath);
+                $email->attachFromPath($attachmentPath);
             }
 
-            return $this->mailer->send();
-        } catch (Exception $e) {
-            error_log("Erreur d'envoi d'email : " . $this->mailer->ErrorInfo);
+            $this->mailer->send($email);
+
+            return true;
+        } catch (TransportExceptionInterface $e) {
+            error_log("Erreur d'envoi d'email : " . $e->getMessage());
             return false;
         }
     }
