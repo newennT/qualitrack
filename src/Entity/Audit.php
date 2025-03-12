@@ -40,6 +40,9 @@ class Audit
     #[ORM\OneToMany(targetEntity: Verification::class, mappedBy: 'audit', cascade: ['persist', 'remove'])]
     private Collection $verifications;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $graph = null;
+
     public function __construct()
     {
         $this->verifications = new ArrayCollection();
@@ -137,6 +140,18 @@ class Audit
                 $verification->setAudit(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGraph(): ?string
+    {
+        return $this->graph;
+    }
+
+    public function setGraph(?string $graph): static
+    {
+        $this->graph = $graph;
 
         return $this;
     }

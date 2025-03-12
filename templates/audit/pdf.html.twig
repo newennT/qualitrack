@@ -34,6 +34,11 @@
    
 
     <div id="graph-pdf">
+        {% if audit.graph %}
+            <img src="{{ asset('graph/' ~ audit.graph) }}" alt="Graphique de l'audit" width="400">
+        {% else %}
+            <p>Aucun graphique disponible</p>
+        {% endif %}
     </div>
     
 </body>

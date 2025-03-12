@@ -9,6 +9,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -53,6 +55,19 @@ class AuditType extends AbstractType
             ->add('score_conformite', NumberType::class, [
                 'attr' => ['style' => 'display: none;'],
                 'label' => false
+            ])
+            ->add('graph', FileType::class, [
+                'attr' => ['style' => 'display: none;'],
+                'label' => false,
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '5M',
+                        'mimeTypes' => ['image/jpeg', 'image/png'],
+                        'mimeTypesMessage' => 'Veuillez télécharger une image JPG ou PNG',
+                    ]),
+                ]
             ])
         ;
     }

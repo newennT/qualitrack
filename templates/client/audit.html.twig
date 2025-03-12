@@ -87,7 +87,8 @@
     <div class="tab-content resultats">
         <p>Score de conformité : <span id="score_affichage">0</span>%</p>
         {{ form_widget(form.score_conformite) }}
-        <canvas id="chart"></canvas>
+        {{ form_widget(form.graph) }}
+        <canvas id="chart" width="400" height="400"></canvas>
         <p>Graphique score de conformité</p>
     </div>
 
@@ -107,7 +108,9 @@
     .comment-div{
         display: none;
     }
-    #chart{
+    #chart, canvas{
+        width: 400px!important;
+        height: 400px!important;
         max-width: 400px;
         max-height: 400px;
     }
@@ -119,11 +122,13 @@
 
 {{ parent() }}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{# <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> #}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+{# <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script> #}
 
 <script>
-
     document.addEventListener('DOMContentLoaded', function(){
+     
 
         // Affichage des onglets
         const buttons = document.querySelectorAll('.tab-button');
@@ -168,6 +173,7 @@
         const scoreAffichage = document.getElementById('score_affichage');
         const scoreInput = document.getElementById('audit_score_conformite');
         const ctx = document.getElementById('chart').getContext('2d');
+        
 
         //////////// Création du graphique
         let chart = new Chart(ctx, {
@@ -180,10 +186,12 @@
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: true
+                responsive: false,
+                maintainAspectRatio: false,
+                aspectRatio: 1,
             }
         })
+
 
         /////////////////Calcul du score de conformité
         function updateScore(){
@@ -221,7 +229,42 @@
         });
 
         updateScore();
-       
+
+
+
+        // Générer l'image du graphique
+        const graphInput = document.querySelector("#audit_graph");
+        const form = document.querySelector("form");
+        const canvas = document.getElementById("chart");
+
+        console.log(graphInput, form, canvas, ctx)
+        
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            console.log(canvas.toDataURL());
+
+            canvas.toBlob((blob) => {
+            if (blob) {
+                console.log(blob)
+                const file = new File([blob], "graph_image.png", { type: blob.type });
+
+                console.log(file)
+
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                graphInput.files = dataTransfer.files;
+
+                console.log(graphInput.files)
+
+                form.submit();
+            } else {
+                console.error("Erreur : Impossible de générer l'image du graphique.");
+            }
+        }, "image/png");
+        });
+                
+        
 
     });
 </script>

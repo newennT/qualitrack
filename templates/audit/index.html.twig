@@ -17,6 +17,7 @@
                 <th>Score_conformite</th>
                 <th>Zone</th>
                 <th>actions</th>
+                <th>graph</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,7 @@
                     <a href="{{ path('app_audit_edit', {'id': audit.id}) }}">edit</a>
                     <a href="#">Générer PDF</a>
                 </td>
+                <th>{{ audit.graph }}</th>
             </tr>
         {% else %}
             <tr>

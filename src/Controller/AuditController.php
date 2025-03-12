@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use App\Service\PdfGeneratorService;
 use App\Service\MailerService;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Filesystem\Filesystem;
 
 
 final class AuditController extends AbstractController
@@ -64,6 +65,26 @@ final class AuditController extends AbstractController
                         $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de l\'image.');
                     }
                 }
+            }
+
+            // Récupération de l'image du graph pour l'intégrer au pdf
+            $graphFile = $form->get('graph')->getData();
+            if($graphFile) {
+                $graphName = 'graph' . uniqid() . '.png';
+                $graphPath = $this->getParameter('graph_directory') . '/';
+                
+                try {
+                    $graphFile->move(
+                        $graphPath,
+                        $graphName
+                    );
+
+                    $audit->setGraph($graphName);
+
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'enregistrement du graphique.');
+                }
+
             }
 
             $entityManager->persist($audit);
