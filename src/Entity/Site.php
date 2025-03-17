@@ -23,8 +23,9 @@ class Site
     private ?string $nom_site = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Email()]
     #[Assert\NotBlank()]
+    #[Assert\Email()]
+    #[Assert\Length(min: 3)]
     private ?string $mail_contact = null;
 
     /**

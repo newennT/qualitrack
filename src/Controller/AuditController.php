@@ -70,15 +70,11 @@ final class AuditController extends AbstractController
             // Récupération de l'image du graph pour l'intégrer au pdf
             $graphFile = $form->get('graph')->getData();
             if($graphFile) {
-                $graphName = 'graph' . uniqid() . '.png';
+                $graphName = 'graph-' . uniqid() . '.png';
                 $graphPath = $this->getParameter('graph_directory') . '/';
                 
                 try {
-                    $graphFile->move(
-                        $graphPath,
-                        $graphName
-                    );
-
+                    $graphFile->move($graphPath, $graphName);
                     $audit->setGraph($graphName);
 
                 } catch (FileException $e) {
@@ -90,6 +86,7 @@ final class AuditController extends AbstractController
             $entityManager->persist($audit);
             $entityManager->flush();
 
+
             // Génération du pdf
             $html = $this->renderView('audit/pdf.html.twig', [
                 'audit' => $audit,
@@ -99,6 +96,7 @@ final class AuditController extends AbstractController
             $pdfFileName = 'audit-' . $audit->getId() . '.pdf';
             $pdfFilePath = $this->getParameter('pdf_directory') . '/' . $pdfFileName;
             file_put_contents($pdfFilePath, $pdfContent);
+            
 
             // Envoi du mail avec le pdf
             if ($audit->getSite() && $audit->getSite()->getMailContact()){
