@@ -89,7 +89,7 @@ class AuditeurControllerTest extends WebTestCase
 
     public function testAccessDeniedIndex(): void 
     {
-        $this->client->request('GET', '/admin');
+        $this->client->request('GET', '/admin/auditeur');
         $this->assertResponseRedirects('/login');
     }
 
@@ -134,7 +134,7 @@ class AuditeurControllerTest extends WebTestCase
     private function loginAsAdmin(): void
     {
         $userRepository = $this->client->getContainer()->get(UserRepository::class);
-        $loggedUser = $userRepository->findOneByEmail('test@gmail.com');
+        $loggedUser = $userRepository->findOneBy(['email' => 'admin@gmail.com']);
         $this->client->loginUser($loggedUser);
     }
 

@@ -29,9 +29,11 @@ class Audit
     private ?string $zone = null;
 
     #[ORM\ManyToOne(inversedBy: 'audits')]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Auditeur $auditeur = null;
 
     #[ORM\ManyToOne(inversedBy: 'audits')]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Site $site = null;
 
     /**

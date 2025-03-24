@@ -30,7 +30,7 @@ class Auditeur
     /**
      * @var Collection<int, Audit>
      */
-    #[ORM\OneToMany(targetEntity: Audit::class, mappedBy: 'auditeur')]
+    #[ORM\OneToMany(mappedBy: 'auditeur', targetEntity: Audit::class, cascade: ['persist', 'remove'])]
     private Collection $audits;
 
     public function __construct()

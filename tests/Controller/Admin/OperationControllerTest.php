@@ -146,7 +146,7 @@ class OperationControllerTest extends WebTestCase
     private function loginAsAdmin(): void
     {
         $userRepository = $this->client->getContainer()->get(UserRepository::class);
-        $loggedUser = $userRepository->findOneByEmail('test@gmail.com');
+        $loggedUser = $userRepository->findOneBy(['email' => 'admin@gmail.com']);
         $this->client->loginUser($loggedUser);
     }
 
