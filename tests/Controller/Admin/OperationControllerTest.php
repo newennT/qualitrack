@@ -58,6 +58,27 @@ class OperationControllerTest extends WebTestCase
         $this->assertSame($operationNom, $operation->getNom());
         $this->assertSame($operationCritere, $operation->getCritere());
         $this->assertSame($operationSupport, $operation->getSupport());
+    }
+
+    public function testEdit(): void 
+    {
+        $this->loginAsAdmin();
+
+        $newOperationDescription = $this->generateRandomString(120);
+
+        $operationRepository = static::getContainer()->get(OperationRepository::class);
+        $operation = $operationRepository->findOneBy([]);
+
+        $this->client->request('GET', '/admin/operation/' . $operation->getId() . '/edit');
+        $this->assertResponseIsSuccessful();
+        $this->client->submitForm('Update', [
+            'operation[description]' => $newOperationDescription,
+        ]);
+
+        $this->assertResponseRedirects('/admin/operation', Response::HTTP_SEE_OTHER);
+
+        $operation = $operationRepository->find($operation->getId());
+        $this->assertSame($newOperationDescription, $operation->getDescription());
 
     }
 
@@ -72,6 +93,55 @@ class OperationControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('h1');
     }
+
+    public function testAccessDeniedIndex(): void 
+    {
+        $this->client->request('GET', '/admin/operation');
+        $this->assertResponseRedirects('/login');
+    }
+
+    public function testAccessDeniedShow(): void 
+    {
+        $operationRepository = static::getContainer()->get(OperationRepository::class);
+        $operation = $operationRepository->findOneBy([]);
+
+        $this->client->request('GET', '/admin/operation/' . $operation->getId());
+        $this->assertResponseRedirects('/login');
+    }
+
+    public function testAccessDeniedNew(): void 
+    {
+        $this->client->request('GET', '/admin/operation/new');
+        $this->assertResponseRedirects('/login');
+    }
+
+    public function testAccessDeniedEdit(): void 
+    {
+        $operationRepository = static::getContainer()->get(OperationRepository::class);
+        $operation = $operationRepository->findOneBy([]);
+
+        $this->client->request('GET', '/admin/operation/' . $operation->getId() . '/edit');
+        $this->assertResponseRedirects('/login');
+    }
+
+    public function testDelete(): void 
+    {
+        $this->loginAsAdmin();
+
+        $operationRepository = static::getContainer()->get(OperationRepository::class);
+        $operation = $operationRepository->findOneBy([]);
+
+        $crawler = $this->client->request('GET', '/admin/operation/' . $operation->getId());
+        $this->client->submit($crawler->filter('#delete-form')->form());
+
+        $this->assertResponseRedirects('/admin/operation', Response::HTTP_SEE_OTHER);
+        $this->assertNull($operationRepository->find($operation->getId()));
+    }
+
+
+
+
+
 
     private function loginAsAdmin(): void
     {

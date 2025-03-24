@@ -70,8 +70,6 @@ class AuditeurControllerTest extends WebTestCase
 
         $this->assertResponseRedirects('/admin/auditeur', Response::HTTP_SEE_OTHER);
 
-        $auditeurRepository = static::getContainer()->get(AuditeurRepository::class);
-
         $auditeur = $auditeurRepository->find($auditeur->getId());
 
         $this->assertSame($newAuditeurPrenom, $auditeur->getPrenom());
@@ -89,13 +87,13 @@ class AuditeurControllerTest extends WebTestCase
         $this->assertSelectorExists('h1');
     }
 
-    public function testAccessDeniedIndexAuditeur(): void 
+    public function testAccessDeniedIndex(): void 
     {
         $this->client->request('GET', '/admin');
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedShowAuditeur(): void 
+    public function testAccessDeniedShow(): void 
     {
         $auditeurRepository = static::getContainer()->get(AuditeurRepository::class);
         $auditeur = $auditeurRepository->findOneBy([]);
@@ -104,13 +102,13 @@ class AuditeurControllerTest extends WebTestCase
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedNewAuditeur(): void 
+    public function testAccessDeniedNew(): void 
     {
         $this->client->request('GET', '/admin/auditeur/new');
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedEditAuditeur(): void 
+    public function testAccessDeniedEdit(): void 
     {
         $auditeurRepository = static::getContainer()->get(AuditeurRepository::class);
         $auditeur = $auditeurRepository->findOneBy([]);
