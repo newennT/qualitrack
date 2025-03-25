@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Site index{% endblock %}
+
+{% block body %}
+    <h1>Site index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom_site</th>
+                <th>Mail_contact</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for site in sites %}
+            <tr>
+                <td>{{ site.id }}</td>
+                <td>{{ site.nomSite }}</td>
+                <td>{{ site.mailContact }}</td>
+                <td>
+                    <a href="{{ path('app_site_show', {'id': site.id}) }}">show</a>
+                    <a href="{{ path('app_site_edit', {'id': site.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">   
+        {{ knp_pagination_render(sites) }}
+    </div>
+
+    <a href="{{ path('app_site_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,273 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Opération de contrôle{% endblock %}
+
+{% block body %}
+    <h1>Opération de contrôle</h1>
+
+    <nav>
+        <button type="button" class="tab-button" data-tab="informations">Informations</button>
+        <button type="button" class="tab-button" data-tab="operations">Opérations</button>
+        <button type="button" class="tab-button" data-tab="resultats">Résultats</button>
+        <hr>
+    </nav>
+
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+
+        {% if form.vars.errors|length > 0 %}
+            <div class="error-messages">
+                <p>Il y a des erreurs dans le formulaire. Veuillez les corriger avant de soumettre.</p>
+                <ul>
+                    {% for error in form.vars.errors %}
+                        <li>{{ error.message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+    <div class="tab-content informations active">
+        {{ form_row(form.site) }}
+        {{ form_row(form.zone) }}
+        {{ form_row(form.date_heure_audit) }}
+        {{ form_row(form.auditeur) }}
+
+        <button type="button" class="tab-button" data-tab="operations">Opérations</button>
+        <hr>
+    </div>
+
+    <div class="tab-content operations">
+        {% for verification in form.verifications %}
+            <div class="operation-item">
+                {{ verification.vars.data.operation.nom }}
+                {{ form_row(verification.est_conforme) }}
+
+                {% if verification.est_conforme.vars.errors|length > 0 %}
+                    <div class="error-messages">
+                        {% for error in verification.est_conforme.vars.errors %}
+                            <p>{{ error.message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="comment-div">
+                    {{ form_label(verification.commentaire) }} 
+                    {{ form_widget(verification.commentaire) }}
+
+                    {% if verification.commentaire.vars.errors|length > 0 %}
+                        <div class="error-messages">
+                            {% for error in verification.commentaire.vars.errors %}
+                                <p>Le commentaire ne peut pas être vide quand la vérification n'est pas conforme.</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {{ form_label(verification.photo) }} 
+                    {{ form_widget(verification.photo) }}
+
+                    {% if verification.photo.vars.errors|length > 0 %}
+                        <div class="error-messages">
+                            {% for error in verification.photo.vars.errors %}
+                                <p>La photo ne peut pas être vide quand la vérification n'est pas conforme.</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if verification.vars.data.photo %}
+                        <img src="{{ asset('uploads/' ~ verification.vars.data.photo) }}" alt="Photo de la vérification" width="150">
+                    {% endif %}
+                </div>
+
+            </div>
+        {% endfor %}
+    
+        <button type="button" class="tab-button" data-tab="resultats">Résultats</button>
+        <hr>
+    </div>
+
+    <div class="tab-content resultats">
+        <p>Score de conformité : <span id="score_affichage">0</span>%</p>
+        {{ form_widget(form.score_conformite) }}
+        {{ form_widget(form.graph) }}
+        <canvas id="chart" width="400" height="400"></canvas>
+        <p>Graphique score de conformité</p>
+    </div>
+
+    <button type="submit">Envoyer</button>
+    {{ form_end(form) }}
+
+
+    <style>
+    .tab-content{
+        display: none;
+    }
+
+    .tab-content.active{
+        display: block;
+    }
+
+    .comment-div{
+        display: none;
+    }
+    #chart, canvas{
+        width: 400px!important;
+        height: 400px!important;
+        max-width: 400px;
+        max-height: 400px;
+    }
+    
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+{# <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> #}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+{# <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script> #}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+     
+
+        // Affichage des onglets
+        const buttons = document.querySelectorAll('.tab-button');
+        const contents = document.querySelectorAll('.tab-content');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function(){
+                contents.forEach(content => content.classList.remove('active'));
+                const tab = this.getAttribute('data-tab');
+                document.querySelector('.' + tab).classList.add('active');
+            });
+        });
+
+        // Affichage des commentaires
+        function showComment(){
+            document.querySelectorAll('.operation-item').forEach(item => {
+                const radioInputs = item.querySelectorAll('input[type="radio"]');
+                const commentDiv = item.querySelector('.comment-div');
+
+                radioInputs.forEach(input => {
+                    if(input.checked && input.value === '0') {
+                        commentDiv.style.display = 'block';
+                    }
+                });
+
+                radioInputs.forEach(input => {
+                    input.addEventListener('change', function() {
+                        if(this.value === '0'){
+                            commentDiv.style.display = 'block';
+                        } else {
+                            commentDiv.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+        showComment();
+
+
+        //Affichage du résultat
+         
+        const scoreAffichage = document.getElementById('score_affichage');
+        const scoreInput = document.getElementById('audit_score_conformite');
+        const ctx = document.getElementById('chart').getContext('2d');
+        
+
+        //////////// Création du graphique
+        let chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Conforme', 'Non conforme'],
+                datasets: [{
+                    data: [100, 0],
+                    backgroundColor: ['#000000', '#cacaca'],
+                }]
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false,
+                aspectRatio: 1,
+            }
+        })
+
+
+        /////////////////Calcul du score de conformité
+        function updateScore(){
+            let totalVerifications = 0;
+            let conformes = 0;
+
+            document.querySelectorAll('.operation-item').forEach(item => {
+                const radios = item.querySelectorAll('input[type="radio"]');
+                let selectedValue = null;
+
+                radios.forEach(radio => {
+                    if(radio.checked) {
+                        selectedValue = radio.value;
+                    }
+                });
+
+                if(selectedValue !== null && selectedValue !== ''){
+                    totalVerifications++;
+                    if(selectedValue === '1'){
+                        conformes++;
+                    }
+                }
+            });
+
+            let score = totalVerifications > 0 ? (conformes / totalVerifications) * 100 : 0;
+            scoreInput.value = score.toFixed(2);
+            scoreAffichage.innerText = score.toFixed(2);
+
+            chart.data.datasets[0].data = [score, 100 - score];
+            chart.update();
+        }
+
+        document.querySelectorAll('.operation-item input[type="radio"]').forEach(input => {
+            input.addEventListener('change', updateScore);
+        });
+
+        updateScore();
+
+
+
+        // Générer l'image du graphique
+        const graphInput = document.querySelector("#audit_graph");
+        const form = document.querySelector("form");
+        const canvas = document.getElementById("chart");
+
+        console.log(graphInput, form, canvas, ctx)
+        
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            console.log(canvas.toDataURL());
+
+            canvas.toBlob((blob) => {
+            if (blob) {
+                console.log(blob)
+                const file = new File([blob], "graph_image.png", { type: blob.type });
+
+                console.log(file)
+
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                graphInput.files = dataTransfer.files;
+
+                console.log(graphInput.files)
+
+                form.submit();
+            } else {
+                console.error("Erreur : Impossible de générer l'image du graphique.");
+            }
+        }, "image/png");
+        });
+                
+        
+
+    });
+</script>
+
+
+{% endblock %}

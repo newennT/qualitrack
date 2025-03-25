@@ -6,6 +6,8 @@ use App\Repository\SiteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: SiteRepository::class)]
 class Site
@@ -16,15 +18,20 @@ class Site
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2)]
     private ?string $nom_site = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank()]
+    #[Assert\Email()]
+    #[Assert\Length(min: 3)]
     private ?string $mail_contact = null;
 
     /**
      * @var Collection<int, Audit>
      */
-    #[ORM\OneToMany(targetEntity: Audit::class, mappedBy: 'site')]
+    #[ORM\OneToMany(targetEntity: Audit::class, mappedBy: 'site', cascade: ['persist', 'remove'])]
     private Collection $audits;
 
     public function __construct()

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AuditRepository::class)]
 class Audit
@@ -23,23 +24,31 @@ class Audit
     private ?float $score_conformite = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2)]
     private ?string $zone = null;
 
     #[ORM\ManyToOne(inversedBy: 'audits')]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Auditeur $auditeur = null;
 
     #[ORM\ManyToOne(inversedBy: 'audits')]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Site $site = null;
 
     /**
      * @var Collection<int, Verification>
      */
-    #[ORM\OneToMany(targetEntity: Verification::class, mappedBy: 'audit')]
+    #[ORM\OneToMany(targetEntity: Verification::class, mappedBy: 'audit', cascade: ['persist', 'remove'])]
     private Collection $verifications;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $graph = null;
 
     public function __construct()
     {
         $this->verifications = new ArrayCollection();
+        $this->date_heure_audit = new \DateTime();
     }
 
     public function getId(): ?int
@@ -133,6 +142,18 @@ class Audit
                 $verification->setAudit(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGraph(): ?string
+    {
+        return $this->graph;
+    }
+
+    public function setGraph(?string $graph): static
+    {
+        $this->graph = $graph;
 
         return $this;
     }

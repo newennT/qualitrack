@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Auditeur index{% endblock %}
+
+{% block body %}
+    <h1>Auditeur index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for auditeur in auditeurs %}
+            <tr>
+                <td>{{ auditeur.id }}</td>
+                <td>{{ auditeur.nom }}</td>
+                <td>{{ auditeur.prenom }}</td>
+                <td>
+                    <a href="{{ path('app_auditeur_show', {'id': auditeur.id}) }}">show</a>
+                    <a href="{{ path('app_auditeur_edit', {'id': auditeur.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+        <div class="pagination">   
+        {{ knp_pagination_render(auditeurs) }}
+    </div>
+
+    <a href="{{ path('app_auditeur_new') }}">Create new</a>
+{% endblock %}
