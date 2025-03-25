@@ -19,7 +19,7 @@ class SiteControllerTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testIndex(): void 
+    public function testIndexSiteAsLoggedAdmin(): void 
     {   
         $this->loginAsAdmin();
 
@@ -28,7 +28,7 @@ class SiteControllerTest extends WebTestCase
         $this->assertSelectorExists('h1');
     }
 
-    public function testNew(): void 
+    public function testNewSiteAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
@@ -53,7 +53,7 @@ class SiteControllerTest extends WebTestCase
         $this->assertSame($siteNomSite, $site->getNomSite());
     }
 
-    public function testEdit(): void 
+    public function testEditSiteAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
@@ -74,7 +74,7 @@ class SiteControllerTest extends WebTestCase
         $this->assertSame($newSiteNomSite, $site->getNomSite());
     }
     
-    public function testShow(): void 
+    public function testShowSiteAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
@@ -86,13 +86,13 @@ class SiteControllerTest extends WebTestCase
         $this->assertSelectorExists('h1');
     }
 
-    public function testAccessDeniedIndex(): void 
+    public function testAccessDeniedIndexSite(): void 
     {
         $this->client->request('GET', '/admin/site');
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedShow(): void 
+    public function testAccessDeniedShowSite(): void 
     {
         $siteRepository = static::getContainer()->get(SiteRepository::class);
         $site = $siteRepository->findOneBy([]);
@@ -101,13 +101,13 @@ class SiteControllerTest extends WebTestCase
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedNew(): void 
+    public function testAccessDeniedNewSite(): void 
     {
         $this->client->request('GET', '/admin/site/new');
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedEdit(): void 
+    public function testAccessDeniedEditSite(): void 
     {
         $siteRepository = static::getContainer()->get(SiteRepository::class);
         $site = $siteRepository->findOneBy([]);
@@ -116,7 +116,7 @@ class SiteControllerTest extends WebTestCase
         $this->assertResponseRedirects('/login');
     }
 
-    public function testDelete(): void 
+    public function testDeleteSiteAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 

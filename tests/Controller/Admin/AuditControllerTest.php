@@ -19,7 +19,7 @@ class AuditControllerTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testIndex(): void 
+    public function testAuditIndexAsLoggedAdmin(): void 
     {   
         $this->loginAsAdmin();
 
@@ -28,7 +28,7 @@ class AuditControllerTest extends WebTestCase
         $this->assertSelectorExists('h1');
     }
 
-    public function testEdit(): void 
+    public function testEditAuditAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
@@ -49,7 +49,7 @@ class AuditControllerTest extends WebTestCase
         $this->assertSame($newAuditZone, $audit->getZone());
     }
 
-    public function testShow(): void 
+    public function testShowAuditAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
@@ -61,13 +61,13 @@ class AuditControllerTest extends WebTestCase
         $this->assertSelectorExists('h1');
     }
 
-    public function testAccessDeniedIndex(): void 
+    public function testAccessDeniedIndexAudit(): void 
     {
         $this->client->request('GET', '/admin');
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedShow(): void 
+    public function testAccessDeniedShowAudit(): void 
     {
         $auditRepository = static::getContainer()->get(AuditRepository::class);
         $audit = $auditRepository->findOneBy([]);
@@ -76,7 +76,7 @@ class AuditControllerTest extends WebTestCase
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedEdit(): void 
+    public function testAccessDeniedEditAudit(): void 
     {
         $auditRepository = static::getContainer()->get(AuditRepository::class);
         $audit = $auditRepository->findOneBy([]);
@@ -85,7 +85,7 @@ class AuditControllerTest extends WebTestCase
         $this->assertResponseRedirects('/login');
     }
 
-    public function testDelete(): void 
+    public function testDeleteAuditAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 

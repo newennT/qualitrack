@@ -19,7 +19,7 @@ class AuditeurControllerTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testIndex(): void 
+    public function testIndexAuditeurAsLoggedAdmin(): void 
     {   
         $this->loginAsAdmin();
 
@@ -28,7 +28,7 @@ class AuditeurControllerTest extends WebTestCase
         $this->assertSelectorExists('h1');
     }
 
-    public function testNew(): void 
+    public function testNewAuditeurAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
@@ -54,7 +54,7 @@ class AuditeurControllerTest extends WebTestCase
         $this->assertSame($auditeurPrenom, $auditeur->getPrenom());
     }
 
-    public function testEdit(): void 
+    public function testEditAuditeurAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
@@ -75,7 +75,7 @@ class AuditeurControllerTest extends WebTestCase
         $this->assertSame($newAuditeurPrenom, $auditeur->getPrenom());
     }
     
-    public function testShow(): void 
+    public function testShowAuditeurAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
@@ -87,13 +87,13 @@ class AuditeurControllerTest extends WebTestCase
         $this->assertSelectorExists('h1');
     }
 
-    public function testAccessDeniedIndex(): void 
+    public function testAccessDeniedIndexAuditeur(): void 
     {
         $this->client->request('GET', '/admin/auditeur');
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedShow(): void 
+    public function testAccessDeniedShowAuditeur(): void 
     {
         $auditeurRepository = static::getContainer()->get(AuditeurRepository::class);
         $auditeur = $auditeurRepository->findOneBy([]);
@@ -102,13 +102,13 @@ class AuditeurControllerTest extends WebTestCase
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedNew(): void 
+    public function testAccessDeniedNewAuditeur(): void 
     {
         $this->client->request('GET', '/admin/auditeur/new');
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedEdit(): void 
+    public function testAccessDeniedEditAuditeur(): void 
     {
         $auditeurRepository = static::getContainer()->get(AuditeurRepository::class);
         $auditeur = $auditeurRepository->findOneBy([]);
@@ -117,7 +117,7 @@ class AuditeurControllerTest extends WebTestCase
         $this->assertResponseRedirects('/login');
     }
 
-    public function testDelete(): void 
+    public function testDeleteAuditeurAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 

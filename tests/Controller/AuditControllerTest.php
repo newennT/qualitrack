@@ -18,14 +18,14 @@ class AuditeurControllerTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testIndex(): void 
+    public function testAuditNew(): void 
     {
         $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Opération de contrôle');
     } 
 
-    public function testNew(): void 
+    public function testAuditNewForm(): void 
     {
         $auditZone = $this->generateRandomString(10);
         $auditScoreConformite = 62.0;

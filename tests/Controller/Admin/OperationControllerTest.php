@@ -19,7 +19,7 @@ class OperationControllerTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testIndex(): void 
+    public function testIndexOperationAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
@@ -28,7 +28,7 @@ class OperationControllerTest extends WebTestCase
         $this->assertSelectorExists('h1');
     }
 
-    public function testNew(): void 
+    public function testNewOperationAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
@@ -60,7 +60,7 @@ class OperationControllerTest extends WebTestCase
         $this->assertSame($operationSupport, $operation->getSupport());
     }
 
-    public function testEdit(): void 
+    public function testEditOperationAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
@@ -82,7 +82,7 @@ class OperationControllerTest extends WebTestCase
 
     }
 
-    public function testShow(): void 
+    public function testShowOperationAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
@@ -94,13 +94,13 @@ class OperationControllerTest extends WebTestCase
         $this->assertSelectorExists('h1');
     }
 
-    public function testAccessDeniedIndex(): void 
+    public function testAccessDeniedIndexOperation(): void 
     {
         $this->client->request('GET', '/admin/operation');
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedShow(): void 
+    public function testAccessDeniedShowOperation(): void 
     {
         $operationRepository = static::getContainer()->get(OperationRepository::class);
         $operation = $operationRepository->findOneBy([]);
@@ -109,13 +109,13 @@ class OperationControllerTest extends WebTestCase
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedNew(): void 
+    public function testAccessDeniedNewOperation(): void 
     {
         $this->client->request('GET', '/admin/operation/new');
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessDeniedEdit(): void 
+    public function testAccessDeniedEditOperation(): void 
     {
         $operationRepository = static::getContainer()->get(OperationRepository::class);
         $operation = $operationRepository->findOneBy([]);
@@ -124,7 +124,7 @@ class OperationControllerTest extends WebTestCase
         $this->assertResponseRedirects('/login');
     }
 
-    public function testDelete(): void 
+    public function testDeleteOperationAsLoggedAdmin(): void 
     {
         $this->loginAsAdmin();
 
