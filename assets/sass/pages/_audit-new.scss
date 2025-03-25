@@ -1,0 +1,51 @@
+@use "../abstracts/variables" as *;
+
+.tab-content{
+    display: none;
+}
+
+.tab-content.active{
+    display: block;
+}
+
+.comment-div{
+    display: none;
+}
+#chart, canvas{
+    width: 400px!important;
+    height: 400px!important;
+    max-width: 400px;
+    max-height: 400px;
+}
+
+.audit-informations{
+    width: 100%;
+    button{
+        background-color: $bleu;
+        color: #ffffff;
+        margin-top: 20px;
+        &:hover{
+            background-color: #ffffff;
+            color: $bleu;
+        }
+    }
+    .text-container{
+        width: 90%;
+        padding: 5%;
+        background-color: $bleu;
+        color: #ffffff;
+        border-radius: 10px;
+        label, input, select, textarea{
+            display: block;
+        }
+        input, select, textarea{
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            margin-top: 5px;
+            padding: 2px;
+            border: none;
+            background-color: #ffffff;
+        }
+    }
+}

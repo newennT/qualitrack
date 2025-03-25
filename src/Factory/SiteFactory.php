@@ -33,7 +33,7 @@ final class SiteFactory extends PersistentProxyObjectFactory
     {
         return [
             'mail_contact' => self::faker()->unique()->email(),
-            'nom_site' => self::faker()->text(255),
+            'nom_site' => self::faker()->word(),
         ];
     }
 

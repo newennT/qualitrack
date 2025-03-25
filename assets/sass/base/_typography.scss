@@ -1,0 +1,28 @@
+@use "../abstracts/variables" as *;
+
+@font-face {
+    font-family: 'futura-book';
+    src: url('../../fonts/FuturaPTBook.woff');
+}
+
+@font-face {
+    font-family: 'futura-demi';
+    src: url('../../fonts/FuturaPTDemi.woff');
+}
+
+@font-face {
+    font-family: 'futura-bold';
+    src: url('../../fonts/FuturaPTBold.woff');
+}
+
+h1{
+    font-family: 'futura-bold', sans-serif;
+    text-align: center;
+    font-size: 50px;
+    color: $neutral;
+}
+
+p, label, ul, li, a, input, button, select{
+    font-family: 'futura-book', sans-serif;
+    font-size: 16px;
+}

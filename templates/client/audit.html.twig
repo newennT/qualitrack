@@ -3,128 +3,114 @@
 {% block title %}Opération de contrôle{% endblock %}
 
 {% block body %}
-    <h1>Opération de contrôle</h1>
+<main>
+    <div class="container">
+    
+        <h1>Opération de contrôle</h1>
 
-    <nav>
-        <button type="button" class="tab-button" data-tab="informations">Informations</button>
-        <button type="button" class="tab-button" data-tab="operations">Opérations</button>
-        <button type="button" class="tab-button" data-tab="resultats">Résultats</button>
-        <hr>
-    </nav>
+        <nav class="nav-audit">
+            <button type="button" class="tab-button active" data-tab="informations">Informations</button>
+            <button type="button" class="tab-button" data-tab="operations">Opérations</button>
+            <button type="button" class="tab-button" data-tab="resultats">Résultats</button>
+        </nav>
 
-    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 
-        {% if form.vars.errors|length > 0 %}
-            <div class="error-messages">
-                <p>Il y a des erreurs dans le formulaire. Veuillez les corriger avant de soumettre.</p>
-                <ul>
-                    {% for error in form.vars.errors %}
-                        <li>{{ error.message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-
-    <div class="tab-content informations active">
-        {{ form_row(form.site) }}
-        {{ form_row(form.zone) }}
-        {{ form_row(form.date_heure_audit) }}
-        {{ form_row(form.auditeur) }}
-
-        <button type="button" class="tab-button" data-tab="operations">Opérations</button>
-        <hr>
-    </div>
-
-    <div class="tab-content operations">
-        {% for verification in form.verifications %}
-            <div class="operation-item">
-                {{ verification.vars.data.operation.nom }}
-                {{ form_row(verification.est_conforme) }}
-
-                {% if verification.est_conforme.vars.errors|length > 0 %}
-                    <div class="error-messages">
-                        {% for error in verification.est_conforme.vars.errors %}
-                            <p>{{ error.message }}</p>
+            {% if form.vars.errors|length > 0 %}
+                <div class="error-messages">
+                    <p>Il y a des erreurs dans le formulaire. Veuillez les corriger avant de soumettre.</p>
+                    <ul>
+                        {% for error in form.vars.errors %}
+                            <li>{{ error.message }}</li>
                         {% endfor %}
-                    </div>
-                {% endif %}
-
-                <div class="comment-div">
-                    {{ form_label(verification.commentaire) }} 
-                    {{ form_widget(verification.commentaire) }}
-
-                    {% if verification.commentaire.vars.errors|length > 0 %}
-                        <div class="error-messages">
-                            {% for error in verification.commentaire.vars.errors %}
-                                <p>Le commentaire ne peut pas être vide quand la vérification n'est pas conforme.</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-
-                    {{ form_label(verification.photo) }} 
-                    {{ form_widget(verification.photo) }}
-
-                    {% if verification.photo.vars.errors|length > 0 %}
-                        <div class="error-messages">
-                            {% for error in verification.photo.vars.errors %}
-                                <p>La photo ne peut pas être vide quand la vérification n'est pas conforme.</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-
-                    {% if verification.vars.data.photo %}
-                        <img src="{{ asset('uploads/' ~ verification.vars.data.photo) }}" alt="Photo de la vérification" width="150">
-                    {% endif %}
+                    </ul>
                 </div>
+            {% endif %}
 
+        <div class="tab-content audit-informations informations active">
+            <div class="text-container">
+                {{ form_row(form.site) }}
+                {{ form_row(form.zone) }}
+                {{ form_row(form.date_heure_audit) }}
+                {{ form_row(form.auditeur) }}
             </div>
-        {% endfor %}
+
+            <button type="button" class="tab-button" data-tab="operations">Opérations</button>
+        </div>
+
+        <div class="tab-content operations">
+            {% for verification in form.verifications %}
+                <div class="operation-item">
+                    {{ verification.vars.data.operation.nom }}
+                    {{ form_row(verification.est_conforme) }}
+
+                    {% if verification.est_conforme.vars.errors|length > 0 %}
+                        <div class="error-messages">
+                            {% for error in verification.est_conforme.vars.errors %}
+                                <p>{{ error.message }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="comment-div">
+                        {{ form_label(verification.commentaire) }} 
+                        {{ form_widget(verification.commentaire) }}
+
+                        {% if verification.commentaire.vars.errors|length > 0 %}
+                            <div class="error-messages">
+                                {% for error in verification.commentaire.vars.errors %}
+                                    <p>Le commentaire ne peut pas être vide quand la vérification n'est pas conforme.</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {{ form_label(verification.photo) }} 
+                        {{ form_widget(verification.photo) }}
+
+                        {% if verification.photo.vars.errors|length > 0 %}
+                            <div class="error-messages">
+                                {% for error in verification.photo.vars.errors %}
+                                    <p>La photo ne peut pas être vide quand la vérification n'est pas conforme.</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if verification.vars.data.photo %}
+                            <img src="{{ asset('uploads/' ~ verification.vars.data.photo) }}" alt="Photo de la vérification" width="150">
+                        {% endif %}
+                    </div>
+
+                </div>
+            {% endfor %}
+        
+            <button type="button" class="tab-button" data-tab="resultats">Résultats</button>
+
+        </div>
+
+        <div class="tab-content resultats">
+            <p>Score de conformité : <span id="score_affichage">0</span>%</p>
+            {{ form_widget(form.score_conformite) }}
+            {{ form_widget(form.graph) }}
+            <canvas id="chart" width="400" height="400"></canvas>
+            <p>Graphique score de conformité</p>
+            
+            <button type="submit">Envoyer</button>
+        </div>
+
+        
+        {{ form_end(form) }}
     
-        <button type="button" class="tab-button" data-tab="resultats">Résultats</button>
-        <hr>
     </div>
-
-    <div class="tab-content resultats">
-        <p>Score de conformité : <span id="score_affichage">0</span>%</p>
-        {{ form_widget(form.score_conformite) }}
-        {{ form_widget(form.graph) }}
-        <canvas id="chart" width="400" height="400"></canvas>
-        <p>Graphique score de conformité</p>
-    </div>
-
-    <button type="submit">Envoyer</button>
-    {{ form_end(form) }}
-
-
-    <style>
-    .tab-content{
-        display: none;
-    }
-
-    .tab-content.active{
-        display: block;
-    }
-
-    .comment-div{
-        display: none;
-    }
-    #chart, canvas{
-        width: 400px!important;
-        height: 400px!important;
-        max-width: 400px;
-        max-height: 400px;
-    }
+</main>
     
-    </style>
+
 {% endblock %}
 
 {% block javascripts %}
 
 {{ parent() }}
 
-{# <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> #}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
-{# <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script> #}
 
 <script>
     document.addEventListener('DOMContentLoaded', function(){
@@ -137,6 +123,8 @@
         buttons.forEach(button => {
             button.addEventListener('click', function(){
                 contents.forEach(content => content.classList.remove('active'));
+                buttons.forEach(button => button.classList.remove('active'));
+                this.classList.add('active');
                 const tab = this.getAttribute('data-tab');
                 document.querySelector('.' + tab).classList.add('active');
             });
