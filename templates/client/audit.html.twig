@@ -35,15 +35,33 @@
                 {{ form_row(form.auditeur) }}
             </div>
 
-            <button type="button" class="tab-button" data-tab="operations">Opérations</button>
+            <div class="container-boutons avant">
+                <button type="button" class="tab-button" data-tab="operations">Opérations</button>
+            </div>
         </div>
 
         <div class="tab-content operations">
             {% for verification in form.verifications %}
                 <div class="operation-item">
-                    {{ verification.vars.data.operation.nom }}
-                    {{ form_row(verification.est_conforme) }}
 
+                    <div class="nom">
+                        <p>{{ verification.vars.data.operation.nom }}</p>
+                    </div>
+
+                    <div class="support">
+                        <p class="label">Meubles ou équipements concernés</p>
+                        <p class="content">- {{ verification.vars.data.operation.support }}</p>
+                    </div>
+                    
+                    <div class="critere">
+                        <p class="label">Qualitée demandée après opération</p>
+                        <p class="content">- {{ verification.vars.data.operation.critere }}</p>
+                    </div>
+                    
+                    <div class="est-conforme">
+                        <div class="content">{{ form_row(verification.est_conforme) }}</div>
+                    </div>
+                    
                     {% if verification.est_conforme.vars.errors|length > 0 %}
                         <div class="error-messages">
                             {% for error in verification.est_conforme.vars.errors %}
@@ -53,37 +71,47 @@
                     {% endif %}
 
                     <div class="comment-div">
-                        {{ form_label(verification.commentaire) }} 
-                        {{ form_widget(verification.commentaire) }}
+                        <div class="comment">
+                            {{ form_label(verification.commentaire) }} 
+                            {{ form_widget(verification.commentaire) }}
+                        
 
-                        {% if verification.commentaire.vars.errors|length > 0 %}
-                            <div class="error-messages">
-                                {% for error in verification.commentaire.vars.errors %}
-                                    <p>Le commentaire ne peut pas être vide quand la vérification n'est pas conforme.</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                            {% if verification.commentaire.vars.errors|length > 0 %}
+                                <div class="error-messages">
+                                    {% for error in verification.commentaire.vars.errors %}
+                                        <p>Le commentaire ne peut pas être vide quand la vérification n'est pas conforme.</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
 
-                        {{ form_label(verification.photo) }} 
-                        {{ form_widget(verification.photo) }}
+                        <div class="photo">
+                            {{ form_widget(verification.photo) }}
+                            <a class="custom-photo button">
+                                <i class="fa-regular fa-square-plus"></i><span class="file-name"> Ajouter une photo</span>
+                            </a>
 
-                        {% if verification.photo.vars.errors|length > 0 %}
-                            <div class="error-messages">
-                                {% for error in verification.photo.vars.errors %}
-                                    <p>La photo ne peut pas être vide quand la vérification n'est pas conforme.</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                            {% if verification.photo.vars.errors|length > 0 %}
+                                <div class="error-messages">
+                                    {% for error in verification.photo.vars.errors %}
+                                        <p>La photo ne peut pas être vide quand la vérification n'est pas conforme.</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
 
-                        {% if verification.vars.data.photo %}
-                            <img src="{{ asset('uploads/' ~ verification.vars.data.photo) }}" alt="Photo de la vérification" width="150">
-                        {% endif %}
+                            {% if verification.vars.data.photo %}
+                                <img src="{{ asset('uploads/' ~ verification.vars.data.photo) }}" alt="Photo de la vérification" width="150">
+                            {% endif %}
+                        </div>
                     </div>
 
                 </div>
             {% endfor %}
         
-            <button type="button" class="tab-button" data-tab="resultats">Résultats</button>
+            <div class="container-boutons avant-arriere">
+                <button type="button" class="tab-button" data-tab="informations"><<</button>
+                <button type="button" class="tab-button" data-tab="resultats">Résultats</button>
+            </div>
 
         </div>
 
@@ -92,9 +120,11 @@
             {{ form_widget(form.score_conformite) }}
             {{ form_widget(form.graph) }}
             <canvas id="chart" width="400" height="400"></canvas>
-            <p>Graphique score de conformité</p>
             
-            <button type="submit">Envoyer</button>
+            <div class="container-boutons avant-arriere">
+                <button type="button" class="tab-button" data-tab="operations"><<</button>
+                <button type="submit" class="envoyer">Envoyer</button>
+            </div>
         </div>
 
         
@@ -118,15 +148,30 @@
 
         // Affichage des onglets
         const buttons = document.querySelectorAll('.tab-button');
+        const navButtons = document.querySelectorAll('.nav-audit .tab-button');
         const contents = document.querySelectorAll('.tab-content');
 
         buttons.forEach(button => {
             button.addEventListener('click', function(){
-                contents.forEach(content => content.classList.remove('active'));
-                buttons.forEach(button => button.classList.remove('active'));
-                this.classList.add('active');
                 const tab = this.getAttribute('data-tab');
+
+                contents.forEach(content => content.classList.remove('active'));
                 document.querySelector('.' + tab).classList.add('active');
+
+                if (!this.closest('.container-boutons')) {
+                    buttons.forEach(btn => {
+                        if (!btn.closest('.container-boutons')) btn.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                const correspondingNavButton = document.querySelector(`.nav-audit .tab-button[data-tab="${tab}"]`);
+                if (correspondingNavButton) {
+                    correspondingNavButton.classList.add('active');
+                }
+
+                
             });
         });
 
@@ -155,6 +200,23 @@
         }
         showComment();
 
+        // Affichage lors de l'enristrement des photos
+
+        document.querySelectorAll('.photo').forEach(photoDiv => {
+            const fileInput = photoDiv.querySelector('input');
+            const customButton = photoDiv.querySelector('.custom-photo');
+            const fileNameDisplay = photoDiv.querySelector('.file-name');
+
+            customButton.addEventListener("click", () => fileInput.click());
+
+            fileInput.addEventListener("change", () => {
+                if (fileInput.files.length) {
+                    fileNameDisplay.textContent = fileInput.files[0].name;
+                } else {
+                    fileNameDisplay.textContent = "Ajouter une photo";
+                }
+            });
+        });
 
         //Affichage du résultat
          
@@ -170,7 +232,7 @@
                 labels: ['Conforme', 'Non conforme'],
                 datasets: [{
                     data: [100, 0],
-                    backgroundColor: ['#000000', '#cacaca'],
+                    backgroundColor: ['#007CBE', '#ff0000'],
                 }]
             },
             options: {

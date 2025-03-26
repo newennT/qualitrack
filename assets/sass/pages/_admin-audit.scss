@@ -1,0 +1,71 @@
+@use "../abstracts/variables" as *;
+
+.admin-index{
+    width: 100%;
+    h2{
+        margin-top: 50px;
+    }
+    table{
+        width: 100%;
+        thead{
+            text-align: left;
+            tr{
+                th{
+                    padding: 10px 15px 10px 15px;
+                    background-color: $neutral;
+                    color: #ffffff;
+                }
+            }  
+        }
+        thead th:first-child {
+            border-top-left-radius: 10px;
+        }
+        
+        thead th:last-child {
+            border-top-right-radius: 10px;
+        }
+        tbody{
+            tr{
+                .actions{
+                    display: flex;
+                    justify-content: space-between;
+                    i{
+                        color: $bleu;
+                        &:hover{
+                            color: $neutral;
+                        }
+                    }
+                    .button-trash{
+                        padding: 0;
+                        i{
+                            color: #ff0000;
+                        }
+                        
+                        &:hover{
+                            i{
+                                color: $neutral;
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.boutons-admin{
+    display: flex;
+    .button{
+        margin-right: 10px;
+        background-color: $bleu;
+        text-transform: initial;
+        color: #ffffff;
+        text-decoration: none;
+        &:hover{
+            background-color: #ffffff;
+            color: $bleu;
+        }
+    }
+    
+}

@@ -20,7 +20,9 @@ button, .button{
     margin-top: 50px;
     .tab-button{
         background-color: #ffffff;
-        color: $neutral;
+        color: $neutral-light;
+        flex: 1;
+        max-width: 32.5%;
         &:hover{
             background-color: $bleu;
             color: #ffffff;
@@ -29,6 +31,9 @@ button, .button{
     .tab-button.active{
         border: $bleu 2px solid;
         color: $bleu;
+        &:hover{
+            color: #ffffff;
+        }
     }
 }
 

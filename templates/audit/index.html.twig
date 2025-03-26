@@ -1,51 +1,64 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Audit index{% endblock %}
+{% block title %}Liste des audits{% endblock %}
 
 {% block body %}
-    <h1>Audit index</h1>
+<main>
+    <div class="container">
+        <h1>Espace administrateur</h1>
 
-    <a href="{{ path('app_auditeur_index')}}">Liste des auditeurs</a>
-    <a href="{{ path('app_site_index')}}">Liste des sites</a>
-    <a href="{{ path('app_operation_index')}}">Liste des opérations</a>
+        <div class="boutons-admin">
+            <a class="button" href="{{ path('app_auditeur_index')}}">Liste des auditeurs</a>
+            <a class="button" href="{{ path('app_site_index')}}">Liste des sites</a>
+            <a class="button" href="{{ path('app_operation_index')}}">Liste des opérations</a>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Date_heure_audit</th>
-                <th>Score_conformite</th>
-                <th>Zone</th>
-                <th>actions</th>
-                <th>graph</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for audit in audits %}
-            <tr>
-                <td>{{ audit.id }}</td>
-                <td>{{ audit.dateHeureAudit ? audit.dateHeureAudit|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ audit.scoreConformite }}%</td>
-                <td>{{ audit.zone }}</td>
-                <td>
-                    <a href="{{ path('app_audit_show', {'id': audit.id}) }}">show</a>
-                    <a href="{{ path('app_audit_edit', {'id': audit.id}) }}">edit</a>
-                    <a href="#">Générer PDF</a>
-                </td>
-                <th>{{ audit.graph }}</th>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
+        <div class="admin-index">
+        <h2>Liste des audits</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Site et zone</th>
+                        <th>Auditeur</th>
+                        <th>Score</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for audit in audits %}
+                    <tr>
+                        <td>{{ audit.dateHeureAudit|date('Y-m-d H:i:s') }}</td>
+                        <td><span class="site">{{ audit.site.nomSite }}</span> : <span class="zone">{{ audit.zone }}</span></td>
+                        <td><span class="prenom">{{ audit.auditeur.prenom }}</span> <span class="prenom">{{ audit.auditeur.nom }}</span></td>
+                        <td>{{ audit.scoreConformite }}%</td>
+                        
+                        <td class="actions">
+                            <a href="{{ path('app_audit_edit', {'id': audit.id}) }}">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <a href="{{ path('app_audit_pdf', {'id': audit.id}) }}">
+                                <i class="fa-solid fa-download"></i>
+                            </a>
 
-        </tbody>
-    </table>
-    <div class="pagination">   
-        {{ knp_pagination_render(audits) }}
+                            {{ include('audit/_delete_form.html.twig') }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">Aucun audit trouvé</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">   
+            {{ knp_pagination_render(audits) }}
+        </div>
     </div>
 
-    
+</main>
 
 {% endblock %}

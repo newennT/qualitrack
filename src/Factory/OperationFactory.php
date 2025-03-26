@@ -32,11 +32,11 @@ final class OperationFactory extends PersistentProxyObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'critere' => self::faker()->text(),
-            'description' => self::faker()->text(),
+            'critere' => self::faker()->text(100),
+            'description' => self::faker()->text(150),
             'est_actif' => self::faker()->boolean(),
-            'nom' => self::faker()->text(100),
-            'support' => self::faker()->text(255),
+            'nom' => self::faker()->text(50),
+            'support' => self::faker()->text(10),
         ];
     }
 
