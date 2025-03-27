@@ -100,7 +100,7 @@ class Operation
 
     public function setEstActif(bool $est_actif): static
     {
-        $this->est_actif = $est_actif;
+        $this->est_actif = $est_actif ?? true;
 
         return $this;
     }

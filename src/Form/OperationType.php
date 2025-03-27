@@ -26,6 +26,7 @@ class OperationType extends AbstractType
             ])
             ->add('est_actif', CheckboxType::class, [
                 'label' => 'Activé',
+                'required' => false,
             ])
             ->add('critere', TextareaType::class, [
                 'label' => 'Critère de vérification',

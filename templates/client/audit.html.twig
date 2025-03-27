@@ -42,70 +42,73 @@
 
         <div class="tab-content operations">
             {% for verification in form.verifications %}
-                <div class="operation-item">
 
-                    <div class="nom">
-                        <p>{{ verification.vars.data.operation.nom }}</p>
-                    </div>
+                {% if verification.vars.data.operation.estActif %}
+                    <div class="operation-item">
 
-                    <div class="support">
-                        <p class="label">Meubles ou équipements concernés</p>
-                        <p class="content">- {{ verification.vars.data.operation.support }}</p>
-                    </div>
-                    
-                    <div class="critere">
-                        <p class="label">Qualitée demandée après opération</p>
-                        <p class="content">- {{ verification.vars.data.operation.critere }}</p>
-                    </div>
-                    
-                    <div class="est-conforme">
-                        <div class="content">{{ form_row(verification.est_conforme) }}</div>
-                    </div>
-                    
-                    {% if verification.est_conforme.vars.errors|length > 0 %}
-                        <div class="error-messages">
-                            {% for error in verification.est_conforme.vars.errors %}
-                                <p>{{ error.message }}</p>
-                            {% endfor %}
+                        <div class="nom">
+                            <p>{{ verification.vars.data.operation.nom }}</p>
                         </div>
-                    {% endif %}
 
-                    <div class="comment-div">
-                        <div class="comment">
-                            {{ form_label(verification.commentaire) }} 
-                            {{ form_widget(verification.commentaire) }}
+                        <div class="support">
+                            <p class="label">Meubles ou équipements concernés</p>
+                            <p class="content">- {{ verification.vars.data.operation.support }}</p>
+                        </div>
                         
+                        <div class="critere">
+                            <p class="label">Qualitée demandée après opération</p>
+                            <p class="content">- {{ verification.vars.data.operation.critere }}</p>
+                        </div>
+                        
+                        <div class="est-conforme">
+                            <div class="content">{{ form_row(verification.est_conforme) }}</div>
+                        </div>
+                        
+                        {% if verification.est_conforme.vars.errors|length > 0 %}
+                            <div class="error-messages">
+                                {% for error in verification.est_conforme.vars.errors %}
+                                    <p>{{ error.message }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
 
-                            {% if verification.commentaire.vars.errors|length > 0 %}
-                                <div class="error-messages">
-                                    {% for error in verification.commentaire.vars.errors %}
-                                        <p>Le commentaire ne peut pas être vide quand la vérification n'est pas conforme.</p>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
+                        <div class="comment-div">
+                            <div class="comment">
+                                {{ form_label(verification.commentaire) }} 
+                                {{ form_widget(verification.commentaire) }}
+                            
+
+                                {% if verification.commentaire.vars.errors|length > 0 %}
+                                    <div class="error-messages">
+                                        {% for error in verification.commentaire.vars.errors %}
+                                            <p>Le commentaire ne peut pas être vide quand la vérification n'est pas conforme.</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="photo">
+                                {{ form_widget(verification.photo) }}
+                                <a class="custom-photo button">
+                                    <i class="fa-regular fa-square-plus"></i><span class="file-name"> Ajouter une photo</span>
+                                </a>
+
+                                {% if verification.photo.vars.errors|length > 0 %}
+                                    <div class="error-messages">
+                                        {% for error in verification.photo.vars.errors %}
+                                            <p>La photo ne peut pas être vide quand la vérification n'est pas conforme.</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% if verification.vars.data.photo %}
+                                    <img src="{{ asset('uploads/' ~ verification.vars.data.photo) }}" alt="Photo de la vérification" width="150">
+                                {% endif %}
+                            </div>
                         </div>
 
-                        <div class="photo">
-                            {{ form_widget(verification.photo) }}
-                            <a class="custom-photo button">
-                                <i class="fa-regular fa-square-plus"></i><span class="file-name"> Ajouter une photo</span>
-                            </a>
-
-                            {% if verification.photo.vars.errors|length > 0 %}
-                                <div class="error-messages">
-                                    {% for error in verification.photo.vars.errors %}
-                                        <p>La photo ne peut pas être vide quand la vérification n'est pas conforme.</p>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-
-                            {% if verification.vars.data.photo %}
-                                <img src="{{ asset('uploads/' ~ verification.vars.data.photo) }}" alt="Photo de la vérification" width="150">
-                            {% endif %}
-                        </div>
                     </div>
-
-                </div>
+                    {% endif %}
             {% endfor %}
         
             <div class="container-boutons avant-arriere">

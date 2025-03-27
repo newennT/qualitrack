@@ -7,13 +7,15 @@
     }
     table{
         width: 100%;
+        border-collapse: collapse;
         thead{
             text-align: left;
             tr{
                 th{
                     padding: 10px 15px 10px 15px;
                     background-color: $neutral;
-                    color: #ffffff;
+                    color: #ffffff; 
+                    border-right: #ffffff 2px solid;
                 }
             }  
         }
@@ -23,20 +25,43 @@
         
         thead th:last-child {
             border-top-right-radius: 10px;
+            border-right: none;
         }
         tbody{
             tr{
+               border-bottom: 2px solid $fond; 
+                margin-top: 2px;
+                td{
+                    padding: 10px 15px;
+                    background-color: #ffffff;
+                    vertical-align: middle;
+                }
+                .check{
+                    color: #08a308;
+                }
+                .site{
+                    text-transform: uppercase;
+                }
+                .zone{
+                    text-transform: capitalize;
+                }
+                .nom{
+                    text-transform: uppercase;
+                }
                 .actions{
                     display: flex;
-                    justify-content: space-between;
+                    height: 100%;
+                    
                     i{
                         color: $bleu;
+                        margin-right: 10px;
                         &:hover{
                             color: $neutral;
                         }
                     }
                     .button-trash{
                         padding: 0;
+                        background-color: #ffffff;
                         i{
                             color: #ff0000;
                         }
@@ -54,7 +79,7 @@
     }
 }
 
-.boutons-admin{
+.boutons-admin-principal{
     display: flex;
     .button{
         margin-right: 10px;
@@ -67,5 +92,36 @@
             color: $bleu;
         }
     }
-    
+}
+
+.boutons-admin{
+    display: flex;
+    justify-content: space-between;
+    a{
+        text-transform: initial;
+        text-decoration: none;
+    }
+    .back-menu{
+        background-color: #ffffff;
+        color: $bleu;
+        span{
+            margin-right: 10px;
+        }
+        &:hover{
+            background-color: $bleu;
+            color: #ffffff;
+        }
+    }
+    .add{
+        background-color: $bleu;
+        color: #ffffff;
+        &:hover{
+            background-color: #ffffff;
+            color: $bleu;
+        }
+        i{
+            margin-right: 10px;
+
+        }
+    }
 }
