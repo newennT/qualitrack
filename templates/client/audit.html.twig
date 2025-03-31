@@ -43,7 +43,7 @@
         <div class="tab-content operations">
             {% for verification in form.verifications %}
 
-                {% if verification.vars.data.operation.estActif %}
+                {% if verification.vars.data.operation.estActif == true %}
                     <div class="operation-item">
 
                         <div class="nom">
@@ -64,13 +64,13 @@
                             <div class="content">{{ form_row(verification.est_conforme) }}</div>
                         </div>
                         
-                        {% if verification.est_conforme.vars.errors|length > 0 %}
-                            <div class="error-messages">
-                                {% for error in verification.est_conforme.vars.errors %}
-                                    <p>{{ error.message }}</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                            {% if verification.est_conforme.vars.errors|length > 0 %}
+                                <div class="error-messages">
+                                    {% for error in verification.est_conforme.vars.errors %}
+                                        <p>{{ error.message }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
 
                         <div class="comment-div">
                             <div class="comment">
@@ -108,6 +108,12 @@
                         </div>
 
                     </div>
+                    {% else %}
+                        <div style="display: none;">
+                            {{ form_widget(verification.est_conforme) }}
+                            {{ form_widget(verification.commentaire) }}
+                            {{ form_widget(verification.photo) }}
+                        </div>
                     {% endif %}
             {% endfor %}
         
@@ -152,7 +158,7 @@
         // Affichage des onglets
         const buttons = document.querySelectorAll('.tab-button');
         const navButtons = document.querySelectorAll('.nav-audit .tab-button');
-        const contents = document.querySelectorAll('.tab-content');
+        const contents = document.querySelectorAll('.tab-content'); 
 
         buttons.forEach(button => {
             button.addEventListener('click', function(){

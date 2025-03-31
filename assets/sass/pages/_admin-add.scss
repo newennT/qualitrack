@@ -1,0 +1,54 @@
+@use "../abstracts/variables" as *;
+
+.admin-add{
+    h2{
+        margin-top: 50px;
+    }
+    form{
+        background-color: $bleu;
+        color: #ffffff;
+        border-radius: 10px;
+        width: 100%;
+        .form-container{
+            width: 90%;
+            padding: 5%;
+            input, label{
+                display: block;
+                width: 100%;
+            }
+            input{
+                border-radius: 5px;
+                margin-bottom: 15px;
+                margin-top: 5px;
+                padding: 2px;
+                border: none;
+                background-color: #ffffff;
+            }
+            button{
+                background-color: #ffffff;
+                color: $bleu;
+                border: #ffffff 2px solid;
+                margin-top: 20px;
+                &:hover{
+                    background-color: $bleu;
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+    
+}
+
+.bouton-supprimer{
+    margin-top: 30px;
+    button{
+        background-color: #ff0000;
+        color: #ffffff;
+        border: #ff0000 2px solid;
+        &:hover{
+            background-color: #ff000000;
+            color: #ff0000;
+        }
+    }
+    
+}
