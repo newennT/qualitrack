@@ -35,15 +35,6 @@ final class AuditController extends AbstractController
         ]);
     }
     
-
-    #[Route('/audit/{id}', name: 'app_audit_show', methods: ['GET'])]
-    public function show(Audit $audit): Response
-    {
-        return $this->render('audit/show.html.twig', [
-            'audit' => $audit,
-        ]);
-    }
-
     #[Route('/audit/{id}/edit', name: 'app_audit_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Audit $audit, EntityManagerInterface $entityManager): Response
     {

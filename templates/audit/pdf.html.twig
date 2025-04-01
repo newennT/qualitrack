@@ -5,41 +5,119 @@
     <title>Audit n°{{ audit.id }}</title>
 </head>
 <body>
-<h1>Audit</h1>
-    <h2>Informations</h2>
-    <p>{{ audit.site.getNomSite }}</p>
-    <p>{{ audit.zone }}</p>
-    <p>{{ audit.dateHeureAudit|date('Y-m-d H:i:s') }}</p>
-    <p>{{ audit.auditeur.getNom }} {{ audit.auditeur.getPrenom }}</p>
-    
-    <h2>Opérations</h2>
-    {% for verification in audit.verifications %}
-    <div>
-        {{ verification.operation.nom}}
-        {% if verification.isEstConforme == true %}
-        <p>Conforme</p>
-        {% else %}
-        <p>Non conforme :<br>
-        {{ verification.commentaire }}</p>
-        <div>
-            <img src="{{ absolute_url(asset('uploads/' ~ verification.photo)) }}" alt="Photo de la vérification" width="150">
-        </div>        
-        {% endif %}
-    </div>
-    {% endfor %}
+<h1>Audit n°{{ audit.id }} ({{ audit.scoreConformite }}%)</h1>
 
-    <h2>Résultats</h2>
+    <div class="informations">
+        <h2>Informations</h2>
+        <div class="field">
+            <div class="title">Site</div>
+            <div class="data">{{ audit.site.getNomSite }}</div>
+        </div>
 
-    <p>{{ audit.scoreConformite }}%</p>
-   
+        <div class="field">
+            <div class="title">Zone</div>
+            <div class="data">{{ audit.zone }}</div>
+        </div>
 
-    <div id="graph-pdf">
-        {% if audit.graph %}
-            <img src="{{ asset('graph/' ~ audit.graph) }}" alt="Graphique de l'audit" width="400">
-        {% else %}
-            <p>Aucun graphique disponible</p>
-        {% endif %}
+        <div class="field">
+            <div class="title">Date et heure de l'audit</div>
+            <div class="data">{{ audit.dateHeureAudit|date('Y-m-d H:i:s') }}</div>
+        </div>
+
+        <div class="field">
+            <div class="title">Auditeur</div>
+            <div class="data">{{ audit.auditeur.getNom }} {{ audit.auditeur.getPrenom }}</div>
+        </div>  
+        
     </div>
     
+    <div class="operations">
+        <h2>Opérations</h2>
+        {% for verification in audit.verifications %}
+            {% if verification.operation.isEstActif == true %}
+
+            <div class="verification">
+                <div class="field">
+                    <div class="title">{{ verification.operation.nom }}</div>
+                    <div class="data">
+                        {% if verification.isEstConforme == true %}
+                            <span class="conforme">Conforme</span> 
+                        {% else %}
+                            <span class="non-conforme">Non conforme :</span></br>
+                            {{ verification.commentaire }}
+                            <div>
+                                <img src="{{ absolute_url(asset('uploads/' ~ verification.photo)) }}" alt="Photo de la vérification" width="150">
+                            </div>        
+                        {% endif %}
+                    </div>
+                </div>  
+            </div>
+            {% endif %}
+        {% endfor %}
+    
+    </div>
+    
+    
+    <div class="resultats">
+        <h2>Résultats</h2>
+        <p>Le score de conformité est de {{ audit.scoreConformite }}%</p>
+
+        <div id="graph-pdf">
+            {% if audit.graph %}
+                <img src="{{ asset('graph/' ~ audit.graph) }}" alt="Graphique de l'audit" width="400">
+            {% else %}
+                <p>Aucun graphique disponible</p>
+            {% endif %}
+        </div>
+    </div>
+    
+
+    
+
+<style>
+    body{
+        font-family: 'Arial', sans-serif;
+        font-size: 12px;
+    }
+
+    h2{
+        background-color: #007CBE;
+        color: #ffffff;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .field{
+        margin-bottom: 15px;
+    }
+
+    .field .title{
+        background-color:rgb(223, 223, 223);
+        padding: 3px 6px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 10px;
+    }
+
+    img{
+        margin-top: 5px;
+    }
+
+    .conforme{
+        color:rgb(2, 124, 2);
+        font-weight: bold;
+    }
+
+    .non-conforme{
+        color: #ff0000;
+        font-weight: bold;
+    }
+
+    .resultats p{
+        font-weight: bold;
+    }
+
+</style>
+
 </body>
 </html>

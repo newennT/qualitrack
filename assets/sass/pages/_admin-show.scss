@@ -1,0 +1,51 @@
+@use "../abstracts/variables" as *;
+@use "../base/typography" as *;
+
+.admin-show{
+    width: 100%;
+    h2{
+        margin-top: 50px;
+    }
+    .field-show{
+        width: 100%;
+        margin-top: 20px;
+        .title, .data{
+            padding: 15px 20px;
+        }
+        .title{
+            background-color: $neutral;
+            color: #ffffff;
+            border-radius: 10px 10px 0 0;
+            font-family: 'futura-bold', sans-serif;
+        }
+        .data{
+            background-color: #ffffff;
+        }
+    }
+}
+
+.boutons-show{
+    display: flex;
+    align-items: center;
+    .bouton-modifier{ 
+        margin-top: 30px;
+        margin-right: 20px;
+        .button{
+            background-color: $bleu;
+            color: #ffffff;
+            border: $bleu 2px solid;
+            &:hover{
+                background-color: #ffffff00;
+                color: $bleu;
+            }
+        }
+    }
+}
+
+.vert{
+    color: #35b635;
+}
+
+.rouge{
+    color: #ff0000;
+}

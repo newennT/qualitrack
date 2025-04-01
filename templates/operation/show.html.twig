@@ -1,42 +1,74 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Operation{% endblock %}
+{% block title %}Voir l'opération{% endblock %}
 
 {% block body %}
-    <h1>Operation</h1>
+<main>
+    <div class="container">
+        <h1>Espace administrateur</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ operation.id }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ operation.description }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ operation.nom }}</td>
-            </tr>
-            <tr>
-                <th>Support</th>
-                <td>{{ operation.support }}</td>
-            </tr>
-            <tr>
-                <th>Est_actif</th>
-                <td>{{ operation.estActif ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Critere</th>
-                <td>{{ operation.critere }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="boutons-admin">
+            <a class="button back-menu" href="{{ path('app_operation_index')}}"><span><<</span> Retourner à la liste des opérations</a>
+            <a class="button add" href="{{ path('app_operation_new') }}"><i class="fa-regular fa-square-plus"></i>Ajouter une opération</a>
+        </div>
 
-    <a href="{{ path('app_operation_index') }}">back to list</a>
+        <div class="admin-show">
 
-    <a href="{{ path('app_operation_edit', {'id': operation.id}) }}">edit</a>
+            <h2>Voir l'opération "{{ operation.nom }}"</h2>
+            <div class="field-show">
+                <div class="title">Nom</div>
 
-    {{ include('operation/_delete_form.html.twig') }}
+                <div class="data">
+                    {{ operation.nom }}
+                </div>
+            </div>
+
+            <div class="field-show">
+                <div class="title">Description</div>
+
+                <div class="data">
+                    {{ operation.description }}
+                </div>
+            </div>
+
+            <div class="field-show">
+                <div class="title">Support</div>
+
+                <div class="data">
+                    {{ operation.support }}
+                </div>
+            </div>
+
+            <div class="field-show">
+                <div class="title">Critère de validation</div>
+
+                <div class="data">
+                    {{ operation.critere }}
+                </div>
+            </div>
+
+            <div class="field-show">
+                <div class="title">Actif</div>
+
+                <div class="data">
+                    {{ operation.estActif ? '<span class="vert"><i class="fa-solid fa-square-check"></i></span>' : '<span class="rouge"><i class="fa-solid fa-xmark"></i></span>' }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="boutons-show">
+            <div class="bouton-modifier">
+                <a class="button" href="{{ path('app_operation_edit', {'id': operation.id}) }}">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+            </div>
+        
+            <div class="bouton-supprimer">
+                {{ include('operation/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+
+</main>
+    
 {% endblock %}

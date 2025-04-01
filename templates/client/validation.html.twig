@@ -3,6 +3,14 @@
 {% block title %}Audit{% endblock %}
 
 {% block body %}
-<h1>Audit envoyé</h1>
-<a href="{{ path('app_audit_new')}}"> Créer un nouvel audit </a>
+<main>
+    <div class="container">
+        <h1>Audit envoyé</h1>
+        
+        <div class="validation-bouton">
+            <a class="button" href="{{ path('app_audit_new')}}"> Créer un nouvel audit </a>
+        </div>
+    </div>
+
+</main>
 {% endblock %}

@@ -54,14 +54,6 @@ final class AuditeurController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_auditeur_show', methods: ['GET'])]
-    public function show(Auditeur $auditeur): Response
-    {
-        return $this->render('auditeur/show.html.twig', [
-            'auditeur' => $auditeur,
-        ]);
-    }
-
     #[Route('/{id}', name: 'app_auditeur_delete', methods: ['POST'])]
     public function delete(Request $request, Auditeur $auditeur, EntityManagerInterface $entityManager): Response
     {
