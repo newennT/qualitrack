@@ -5,7 +5,8 @@
     <title>Audit n°{{ audit.id }}</title>
 </head>
 <body>
-<h1>Audit n°{{ audit.id }} ({{ audit.scoreConformite }}%)</h1>
+    <h1>Audit n°{{ audit.id }} ({{ audit.scoreConformite }}%)</h1>
+    <p class="subtitle"><span style="text-transform: uppercase;">{{ audit.site.getNomSite }}</span> ( {{ audit.zone }}) - {{ audit.site.getMailContact }}</p>
 
     <div class="informations">
         <h2>Informations</h2>
@@ -39,6 +40,7 @@
             <div class="verification">
                 <div class="field">
                     <div class="title">{{ verification.operation.nom }}</div>
+                    <div class="description">{{ verification.operation.description }} ({{ verification.operation.critere }})</div>
                     <div class="data">
                         {% if verification.isEstConforme == true %}
                             <span class="conforme">Conforme</span> 
@@ -75,28 +77,77 @@
     
 
 <style>
+    h1{
+        font-size: 40px;
+        text-align: center;
+        margin-bottom: 0;
+    }
+
+    .subtitle{
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
     body{
         font-family: 'Arial', sans-serif;
         font-size: 12px;
     }
 
     h2{
+        margin: 0;
+        margin-bottom: 10px;
+        font-size: 30px;
+    }
+
+    .informations{
         background-color: #007CBE;
+        padding: 20px;
+        border-radius: 7px;
         color: #ffffff;
-        padding: 5px 10px;
-        border-radius: 5px;
     }
 
-    .field{
-        margin-bottom: 15px;
-    }
-
-    .field .title{
-        background-color:rgb(223, 223, 223);
-        padding: 3px 6px;
+    .informations .title{
         font-weight: bold;
-        margin-bottom: 5px;
-        font-size: 10px;
+    }
+
+    .informations .field{
+        margin-top: 15px;
+
+    }
+
+    .informations .data{
+        background-color: #ffffff;
+        padding: 5px 8px;
+        color: #000000;
+        margin-top: 5px;
+    }
+
+    .operations{
+        margin-top: 20px;
+    }
+
+    .verification{
+        margin-bottom: 30px;
+    }
+
+    .verification .title{
+        background-color:rgb(66, 66, 66);
+        color: #ffffff;
+        font-weight: bold;
+        border-radius: 8px 8px 0 0;
+        padding: 5px 8px;
+    }
+
+    .verification .description{
+        color: rgb(139, 139, 139);
+        font-size: 9px;
+        font-weight: bold;
+        padding: 5px 8px;
+    }
+
+    .verification .data{
+        padding: 5px 8px;
     }
 
     img{
