@@ -34,9 +34,10 @@ final class AuditeurController extends AbstractController
     }
 
     #[Route('/new', name: 'app_auditeur_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/edit', name: 'app_auditeur_edit', methods: ['GET', 'POST'])]
+    public function new(?Auditeur $auditeur, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $auditeur = new Auditeur();
+        $auditeur ??= new Auditeur();
         $form = $this->createForm(AuditeurType::class, $auditeur);
         $form->handleRequest($request);
 
@@ -48,32 +49,6 @@ final class AuditeurController extends AbstractController
         }
 
         return $this->render('auditeur/new.html.twig', [
-            'auditeur' => $auditeur,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_auditeur_show', methods: ['GET'])]
-    public function show(Auditeur $auditeur): Response
-    {
-        return $this->render('auditeur/show.html.twig', [
-            'auditeur' => $auditeur,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_auditeur_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Auditeur $auditeur, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(AuditeurType::class, $auditeur);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_auditeur_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('auditeur/edit.html.twig', [
             'auditeur' => $auditeur,
             'form' => $form,
         ]);

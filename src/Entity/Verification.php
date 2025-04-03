@@ -73,7 +73,7 @@ class Verification
 
     public function setEstConforme(?bool $est_conforme): static
     {
-        $this->est_conforme = $est_conforme ?? true;
+        $this->est_conforme = $est_conforme ?? true; 
 
         return $this;
     }

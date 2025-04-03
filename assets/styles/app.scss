@@ -1,0 +1,17 @@
+@use '../sass/abstracts/variables';
+
+@use '../sass/base/basepage';
+@use '../sass/base/typography';
+
+@use '../sass/components/buttons';
+@use '../sass/components/inputs';
+@use '../sass/components/pagination';
+
+@use '../sass/layout/header';
+@use '../sass/layout/footer';
+
+@use '../sass/pages/admin-index';
+@use '../sass/pages/audit-new';
+@use '../sass/pages/admin-add';
+@use '../sass/pages/admin-show';
+@use '../sass/pages/login';

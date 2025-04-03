@@ -34,9 +34,10 @@ final class SiteController extends AbstractController
     }
 
     #[Route('/new', name: 'app_site_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/edit', name: 'app_site_edit', methods: ['GET', 'POST'])]
+    public function new(?Site $site, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $site = new Site();
+        $site ??= new Site();
         $form = $this->createForm(SiteType::class, $site);
         $form->handleRequest($request);
 
@@ -48,32 +49,6 @@ final class SiteController extends AbstractController
         }
 
         return $this->render('site/new.html.twig', [
-            'site' => $site,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_site_show', methods: ['GET'])]
-    public function show(Site $site): Response
-    {
-        return $this->render('site/show.html.twig', [
-            'site' => $site,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_site_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Site $site, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(SiteType::class, $site);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_site_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('site/edit.html.twig', [
             'site' => $site,
             'form' => $form,
         ]);

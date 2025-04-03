@@ -1,11 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Operation{% endblock %}
+{% set action = app.current_route == 'app_operation_new' ? 'Ajouter' : 'Modifier' %}
+
+{% block title %}{{ action}} une opération{% endblock %}
 
 {% block body %}
-    <h1>Create new Operation</h1>
+<main>
+    <div class="container">
+        <h1>Espace administrateur</h1>
 
-    {{ include('operation/_form.html.twig') }}
+        <div class="boutons-admin">
+            <a class="button back-menu" href="{{ path('app_operation_index')}}"><span><<</span> Retourner à la liste des opérations</a>
+        </div>
 
-    <a href="{{ path('app_operation_index') }}">back to list</a>
+        <h2>{{ action}} une opération</h2>
+
+        <div class="admin-add">
+            {{ form_start(form) }}
+
+            <div class="form-container">
+                {{ form_row(form.nom) }}
+                {{ form_row(form.description) }}
+                {{ form_row(form.support) }}
+                {{ form_row(form.critere) }}
+
+                <div class="est-actif">
+                    {{ form_row(form.est_actif) }}
+                </div>
+
+                <div class="container-boutons avant">
+                    <button type="submit">Enregistrer</button>
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+
+        {% if app.current_route == 'app_operation_edit' %}
+            <div class="bouton-supprimer">
+                {{ include('operation/_delete_form.html.twig') }}
+            </div>
+        {% endif %}
+    
+    </div>
+</main>
+
 {% endblock %}

@@ -1,0 +1,189 @@
+@use "../abstracts/variables" as *;
+
+.tab-content{
+    display: none;
+}
+
+.tab-content.active{
+    display: block;
+}
+
+.comment-div{
+    display: none;
+}
+#chart, canvas{
+    width: 400px!important;
+    height: 400px!important;
+    max-width: 400px;
+    max-height: 400px;
+    margin: auto;
+}
+
+.container-boutons{
+    display: flex;
+    
+    .tab-button, .envoyer{
+        background-color: $bleu;
+        color: #ffffff;
+        margin-top: 20px;
+        &:hover{
+            background-color: #ffffff;
+            color: $bleu;
+        }
+    }
+}
+
+.avant{
+    justify-content: flex-end;
+}
+
+.avant-arriere{
+    justify-content: space-between;
+}
+
+.audit-informations{
+    width: 100%;
+    .text-container{
+        width: 90%;
+        padding: 5%;
+        background-color: $bleu;
+        color: #ffffff;
+        border-radius: 10px;
+        label, input, select, textarea{
+            display: block;
+        }
+        input, select, textarea{
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            margin-top: 5px;
+            padding: 2px;
+            border: none;
+            background-color: #ffffff;
+        }
+    }
+}
+
+.audit-operations{
+    .operation-item{
+        margin-top: 30px;
+        border-radius: 10px;
+        .nom{
+            background-color: $neutral;
+            border-radius: 10px 10px 0 0;
+            p{
+                color: #ffffff;
+                font-family: 'futura-bold', sans-serif;
+                padding: 10px 15px 10px 15px;
+                margin: 0;
+            }
+            
+        }
+    }
+    .support, .critere{
+        background-color: #ffffff;
+        margin: 0;
+        .label{
+            font-family: 'futura-bold', sans-serif;
+            padding-top: 10px;
+        }
+        .content{
+            padding-bottom: 10px;
+        }
+        p{
+            padding-left: 15px;
+            padding-right: 15px;
+            color: $neutral;
+            margin: 0;
+        }
+    }
+    .est-conforme{
+        background-color: #ffffff;
+        margin: 0;
+        margin-top: 5px;
+        border-radius: 0 0 10px 10px;
+        .content{
+            padding: 15px;
+            margin: 0;
+            label{
+                color: $neutral;
+                margin-right: 20px;
+            }
+        }
+        
+    }
+    .comment-div{
+        background-color: #ffffff;
+        padding-top: 20px;
+        padding-bottom: 50px;
+        margin-top: -10px;
+        border-radius: 0 0 10px 10px;
+        label, textarea{
+            display: block;
+            width: 98%;
+        }
+        .comment, .photo{
+            padding: 0 15px 15px 15px;
+            label{
+                color: $neutral;
+            }
+            textarea{
+                background-color: $fond;
+                border: none;
+                border-radius: 5px;
+            }
+        }
+        .photo{
+            position: relative;
+            input{
+                opacity: 0.01;
+                position: absolute;
+                top: 0;
+                left: 15px;
+                z-index: 5;
+                cursor: pointer;
+                height: 50px;
+                width: 100%;
+            }
+            .button{
+                position: absolute;
+                top: 0;
+                left: 15px;
+                background-color: $bleu;
+                border: $bleu 2px solid;
+                color: #ffffff;
+                text-transform: initial;
+                i{
+                    margin-right: 10px;
+                }
+            }
+            img{
+                margin-top: 50px;
+            }
+        } 
+    }
+}
+
+.audit-resultats{
+    margin-top: 50px;
+    p{
+        text-align: center;
+        font-family: 'futura-bold', sans-serif;
+    }
+}
+
+.validation-bouton{
+    text-align: center;
+    .button{
+        background-color: $bleu;
+        color: #ffffff;
+        border: $bleu 2px solid;
+        &:hover{
+            background-color: #ffffff00;
+            color: $bleu;
+        }
+    }
+    a{
+        text-decoration: none;
+    }
+}

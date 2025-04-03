@@ -21,18 +21,18 @@ class VerificationType extends AbstractType
     {
         $builder
             ->add('est_conforme', ChoiceType::class, [
-                'label' => 'Est conforme ?',
+                'label' => false,
                 'required' => false,
                 'expanded' => true,
                 'multiple' => false,
                 'placeholder' => 'Ignorer',
                 'choices'  => [
-                    'Oui' => true,
-                    'Non' => false,
+                    'Conforme' => true,
+                    'Non-conforme' => false,
                 ],
             ])
             ->add('commentaire', TextareaType::class, [
-                'label' => 'Commentaire',
+                'label' => 'Si l\'opération n\'est pas conforme, déposez votre commentaire ici',
                 'required' => false,
                 'constraints' => [
                     new NotBlank(['groups' => ['verifier_commentaire']]),
@@ -40,7 +40,7 @@ class VerificationType extends AbstractType
             ])
             ->add('photo', FileType::class, [
                 'mapped' => false,
-                'label' => 'Photo',
+                'label' => false,
                 'required' => false,
                 'constraints' => [
                     new File([

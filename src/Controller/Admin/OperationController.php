@@ -34,9 +34,10 @@ final class OperationController extends AbstractController
     }
 
     #[Route('/new', name: 'app_operation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/edit', name: 'app_operation_edit', methods: ['GET', 'POST'])]
+    public function new(?Operation $operation, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $operation = new Operation();
+        $operation ??= new Operation();
         $form = $this->createForm(OperationType::class, $operation);
         $form->handleRequest($request);
 
@@ -58,24 +59,6 @@ final class OperationController extends AbstractController
     {
         return $this->render('operation/show.html.twig', [
             'operation' => $operation,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_operation_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Operation $operation, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(OperationType::class, $operation);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_operation_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('operation/edit.html.twig', [
-            'operation' => $operation,
-            'form' => $form,
         ]);
     }
 

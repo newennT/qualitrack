@@ -1,11 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Auditeur{% endblock %}
+{% set action = app.current_route == 'app_auditeur_new' ? 'Ajouter' : 'Modifier' %}
+
+{% block title %}{{ action }} un auditeur{% endblock %}
 
 {% block body %}
-    <h1>Create new Auditeur</h1>
+<main>
+    <div class="container">
+        <h1>Espace administrateur</h1>
 
-    {{ include('auditeur/_form.html.twig') }}
+        <div class="boutons-admin">
+            <a class="button back-menu" href="{{ path('app_auditeur_index')}}"><span><<</span> Retourner à la liste des auditeurs</a>
+        </div>
 
-    <a href="{{ path('app_auditeur_index') }}">back to list</a>
+        <h2>{{ action }} un auditeur</h2>
+
+        <div class="admin-add">
+            {{ form_start(form) }}
+
+            <div class="form-container">
+                {{ form_row(form.prenom) }}
+                {{ form_row(form.nom) }}
+
+                <div class="container-boutons avant">
+                    <button type="submit">Enregistrer</button>
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+        
+        </div>
+
+        {% if app.current_route == 'app_auditeur_edit' %}
+            <div class="bouton-supprimer">
+                {{ include('auditeur/_delete_form.html.twig') }}
+            </div>
+        {% endif %}
+
+    </div>
+
+</main>
+    
 {% endblock %}

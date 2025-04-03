@@ -1,0 +1,39 @@
+@use "../abstracts/variables" as *;
+@use "../base/typography" as *;
+
+
+button, .button{
+    padding: 8px 15px 8px 15px;
+    border-radius: 10px;
+    font-family: 'futura-demi', sans-serif;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-audit{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 50px;
+    .tab-button{
+        background-color: #ffffff;
+        color: $neutral-light;
+        flex: 1;
+        max-width: 32.5%;
+        &:hover{
+            background-color: $bleu;
+            color: #ffffff;
+        }
+    }
+    .tab-button.active{
+        border: $bleu 2px solid;
+        color: $bleu;
+        &:hover{
+            color: #ffffff;
+        }
+    }
+}
+

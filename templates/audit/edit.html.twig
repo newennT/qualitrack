@@ -1,77 +1,151 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Audit{% endblock %}
+{% block title %}Audit n°{{ audit.id }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Audit</h1>
+<main>
+    <div class="container">
+        <h1>Espace administrateur</h1>
 
-   {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+        <div class="boutons-admin">
+            <a class="button back-menu" href="{{ path('app_audit_index')}}"><span><<</span> Retourner à la liste des audits</a>
+        </div>
+    
+        <h2>Audit n°{{ audit.id }}</h2>
 
-    <div class="informations active">
-        {{ form_row(form.site) }}
-        {{ form_row(form.zone) }}
-        {{ form_row(form.date_heure_audit) }}
-        {{ form_row(form.auditeur) }}
+        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 
-        <button type="button" class="tab-button" data-tab="operations">Opérations</button>
-        <hr>
-    </div>
-
-    <div class="operations">
-        {% for verification in form.verifications %}
-            <div class="operation-item">
-                {{ verification.vars.data.operation.nom }}
-                {{ form_row(verification.est_conforme) }}
-                <div class="comment-div">
-                    {{ form_label(verification.commentaire) }} 
-                    {{ form_widget(verification.commentaire) }}
-                    {{ form_label(verification.photo) }} 
-                    {{ form_widget(verification.photo) }} 
-                    {% if verification.vars.data.photo %}
-                        <img src="{{ asset('uploads/' ~ verification.vars.data.photo) }}" alt="Photo de la vérification" width="150">
-                    {% endif %}
+            {% if form.vars.errors|length > 0 %}
+                <div class="error-messages">
+                    <p>Il y a des erreurs dans le formulaire. Veuillez les corriger avant de soumettre.</p>
+                    <ul>
+                        {% for error in form.vars.errors %}
+                            <li>{{ error.message }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
+            {% endif %}
 
+        <div class="audit-informations">
+            <div class="text-container">
+                {{ form_row(form.site) }}
+                {{ form_row(form.zone) }}
+                {{ form_row(form.date_heure_audit) }}
+                {{ form_row(form.auditeur) }}
             </div>
-        {% endfor %}
+
+        </div>
+
+        <div class="audit-operations">
+            {% for verification in form.verifications %}
+
+                {% if verification.vars.data.operation.estActif == true %}
+                    <div class="operation-item">
+
+                        <div class="nom">
+                            <p>{{ verification.vars.data.operation.nom }}</p>
+                        </div>
+
+                        <div class="support">
+                            <p class="label">Meubles ou équipements concernés</p>
+                            <p class="content">- {{ verification.vars.data.operation.support }}</p>
+                        </div>
+                        
+                        <div class="critere">
+                            <p class="label">Qualitée demandée après opération</p>
+                            <p class="content">- {{ verification.vars.data.operation.critere }}</p>
+                        </div>
+                        
+                        <div class="est-conforme">
+                            <div class="content">{{ form_row(verification.est_conforme) }}</div>
+                        </div>
+                        
+                            {% if verification.est_conforme.vars.errors|length > 0 %}
+                                <div class="error-messages">
+                                    {% for error in verification.est_conforme.vars.errors %}
+                                        <p>{{ error.message }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                        <div class="comment-div">
+                            <div class="comment">
+                                {{ form_label(verification.commentaire) }} 
+                                {{ form_widget(verification.commentaire) }}
+                            
+
+                                {% if verification.commentaire.vars.errors|length > 0 %}
+                                    <div class="error-messages">
+                                        {% for error in verification.commentaire.vars.errors %}
+                                            <p>Le commentaire ne peut pas être vide quand la vérification n'est pas conforme.</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="photo">
+                                {{ form_widget(verification.photo) }}
+                                <a class="custom-photo button">
+                                    <i class="fa-regular fa-square-plus"></i><span class="file-name"> Ajouter une photo</span>
+                                </a>
+
+                                {% if verification.photo.vars.errors|length > 0 %}
+                                    <div class="error-messages">
+                                        {% for error in verification.photo.vars.errors %}
+                                            <p>La photo ne peut pas être vide quand la vérification n'est pas conforme.</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% if verification.vars.data.photo %}
+                                    <img src="{{ asset('uploads/' ~ verification.vars.data.photo) }}" alt="Photo de la vérification" width="150">
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                    {% else %}
+                        <div style="display: none;">
+                            {{ form_widget(verification.est_conforme) }}
+                            {{ form_widget(verification.commentaire) }}
+                            {{ form_widget(verification.photo) }}
+                        </div>
+                    {% endif %}
+            {% endfor %}
+
+        </div>
+
+        <div class="audit-resultats">
+            <p>Score de conformité : <span id="score_affichage">0</span>%</p>
+            {{ form_widget(form.score_conformite) }}
+            {{ form_widget(form.graph) }}
+            <canvas id="chart" width="400" height="400"></canvas>
+            
+            <div class="container-boutons avant">
+                <button type="submit" class="envoyer">Envoyer</button>
+            </div>
+        </div>
+
+        
+        {{ form_end(form) }}
     
-        <button type="button" class="tab-button" data-tab="resultats">Résultats</button>
-        <hr>
     </div>
-
-    <div class="resultats">
-        <p>Score de conformité : <span id="score_affichage">0</span>%</p>
-        {{ form_widget(form.score_conformite) }}
-        <canvas id="chart"></canvas>
-        <p>Graphique score de conformité</p>
-    </div>
-    <button type="submit">Envoyer</button>
-    {{ form_end(form) }}
-
-    <a href="{{ path('app_audit_index') }}">back to list</a>
-
-    {{ include('audit/_delete_form.html.twig') }}
-<style> 
-    .comment-div{
-        display: none;
-    } 
-    #chart{
-        max-width: 400px;
-        max-height: 400px;
-    }
+</main>
     
-</style>
+
 {% endblock %}
 
 {% block javascripts %}
 
 {{ parent() }}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
 
 <script>
-
     document.addEventListener('DOMContentLoaded', function(){
+     
+
+        
 
         // Affichage des commentaires
         function showComment(){
@@ -98,12 +172,30 @@
         }
         showComment();
 
+        // Affichage lors de l'enristrement des photos
+
+        document.querySelectorAll('.photo').forEach(photoDiv => {
+            const fileInput = photoDiv.querySelector('input');
+            const customButton = photoDiv.querySelector('.custom-photo');
+            const fileNameDisplay = photoDiv.querySelector('.file-name');
+
+            customButton.addEventListener("click", () => fileInput.click());
+
+            fileInput.addEventListener("change", () => {
+                if (fileInput.files.length) {
+                    fileNameDisplay.textContent = fileInput.files[0].name;
+                } else {
+                    fileNameDisplay.textContent = "Ajouter une photo";
+                }
+            });
+        });
 
         //Affichage du résultat
          
         const scoreAffichage = document.getElementById('score_affichage');
         const scoreInput = document.getElementById('audit_score_conformite');
         const ctx = document.getElementById('chart').getContext('2d');
+        
 
         //////////// Création du graphique
         let chart = new Chart(ctx, {
@@ -112,14 +204,16 @@
                 labels: ['Conforme', 'Non conforme'],
                 datasets: [{
                     data: [100, 0],
-                    backgroundColor: ['#000000', '#cacaca'],
+                    backgroundColor: ['#007CBE', '#ff0000'],
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: true
+                responsive: false,
+                maintainAspectRatio: false,
+                aspectRatio: 1,
             }
         })
+
 
         /////////////////Calcul du score de conformité
         function updateScore(){
@@ -157,7 +251,34 @@
         });
 
         updateScore();
-       
+
+
+
+        // Générer l'image du graphique
+        const graphInput = document.querySelector("#audit_graph");
+        const form = document.querySelector("form");
+        const canvas = document.getElementById("chart");
+      
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            canvas.toBlob((blob) => {
+            if (blob) {
+                console.log(blob)
+                const file = new File([blob], "graph_image.png", { type: blob.type });
+
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                graphInput.files = dataTransfer.files;
+
+                form.submit();
+            } else {
+                console.error("Erreur : Impossible de générer l'image du graphique.");
+            }
+        }, "image/png");
+        });
+                
+        
 
     });
 </script>

@@ -1,41 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Site index{% endblock %}
+{% block title %}Liste des sites{% endblock %}
 
 {% block body %}
-    <h1>Site index</h1>
+<main>
+    <div class="container">
+        <h1>Espace administrateur</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom_site</th>
-                <th>Mail_contact</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for site in sites %}
-            <tr>
-                <td>{{ site.id }}</td>
-                <td>{{ site.nomSite }}</td>
-                <td>{{ site.mailContact }}</td>
-                <td>
-                    <a href="{{ path('app_site_show', {'id': site.id}) }}">show</a>
-                    <a href="{{ path('app_site_edit', {'id': site.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="boutons-admin">
+            <a class="button back-menu" href="{{ path('app_audit_index')}}"><span><<</span> Menu principal</a>
+            <a class="button add" href="{{ path('app_site_new') }}"><i class="fa-regular fa-square-plus"></i>Ajouter un site</a>
+        </div>
 
-    <div class="pagination">   
-        {{ knp_pagination_render(sites) }}
+        <div class="admin-index">
+        <h2>Liste des sites</h2>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nom du site</th>
+                        <th>Adresse de contact</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for site in sites %}
+                    <tr>
+
+                        <td><span class="site">{{ site.nomSite }}</span></td>
+                        <td>{{ site.mailContact }}</td>
+                        <td>
+                            <div class="actions">
+                                <a href="{{ path('app_site_edit', {'id': site.id}) }}"><i class="fa-solid fa-pen-to-square"></i></a>
+                                {{ include('site/_delete_form.html.twig') }}
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">   
+            {{ knp_pagination_render(sites) }}
+        </div>
+
     </div>
 
-    <a href="{{ path('app_site_new') }}">Create new</a>
+</main>
+    
 {% endblock %}
