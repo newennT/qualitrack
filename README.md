@@ -12,7 +12,6 @@ Qualitrack was developed as an internal business application to provide a struct
 - Compliance score : Automatically calculate an overall compliance score at the end of the audit.
 - Audit reports : Send the completed audit and its results to the site manager.
 - Audit history : Keep track of completed audits and their results.
--
 
 ## Audit workflow
 1. The employee selects the site to audit.
@@ -22,16 +21,35 @@ Qualitrack was developed as an internal business application to provide a struct
 5. Once all operations have been reviewed, Qualitrack calculates the site's overall compliance score.
 6. The completed audit is sent to the site manager.
 
-## Technologies
-
-
-
+## Administration interface
+Administrators can perform full CRUD operations (Create, Read, Update, Delete) on the main business entities: sites, cleaning operations, audits, auditors. This back-office provides a centralized way to maintain the application's business data and configure the audit workflow without directly modifying the database.
 
 ## Getting Started
 - Clone repo `git clone https://github.com/newennT/qualitrack.git`
 - `cd qualitrack`
+- Open Docker
 - Run `docker compose build --no-cache` to build fresh images
-- Run `docker compose up --pull always -d --wait` to set up and start a fresh Symfony project
+- Run `docker compose up --pull always -d --wait` to set up 
+
+## Technologies
+- Symfony : application framework
+- Twig : server-side rendered user interface
+- Doctrine ORM : database access
+- Symfony Forms : form handling and validation
+- Symfony Security : user authentication and access control
+- SQL : relational data storage
+- JavaScript : dynamic behavior
+- Sass : styling and CSS preprocessing
+
+## Context
+This repository is an anonymized version of a professional project. Company names, identifying information, and production data have been removed or replaced for portfolio purposes. The application was originally developed for internal use and is not intended as a publicly deployable product.
+
+## Screenshots
+
+
+
+
+
 
 
 
