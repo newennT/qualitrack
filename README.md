@@ -32,6 +32,7 @@ Administrators can perform full CRUD operations (Create, Read, Update, Delete) o
 - Run `docker compose up --pull always -d --wait` to set up 
 - Run `npm install` and `npm run build` to compile assets
 - Run `php bin/console doctrine:fixtures:load` to load fixtures
+- Open localhost
 
 ## Technologies
 - Symfony : application framework
@@ -43,7 +44,23 @@ Administrators can perform full CRUD operations (Create, Read, Update, Delete) o
 - JavaScript : dynamic behavior
 - Sass : styling and CSS preprocessing
 
-## Test
+## Code structure
+### Audit workflow
+AuditController handles the main user-facing workflow. It guides auditors through the different stages of an audit. The workflow relies on Doctrine entities and repositories for data management, Symfony Forms for input and validation, and dedicated services for technical operations such as email delivery and PDF generation.
+
+### Administration
+The Controller/Admin namespace contains the controllers dedicated to managing the application's reference and audit data. It provides CRUD interfaces for: Sites, Cleaning operations, Auditors, Audits. Each resource has its own controller and Symfony Form, while Doctrine repositories handle the associated database queries.
+
+### Other components
+- Entities model the application's core business objects and their relationships.
+- Repositories handle database queries through Doctrine ORM.
+- Forms manage data input and validation.
+- Services provide reusable technical functionality, including email and PDF generation.
+- Factories and Fixtures provide development and test data.
+- Twig templates, JavaScript and Sass handle the server-rendered interface and client-side interactions.
+
+## Tests
+- Run `php bin/phpunit`
 
 ## Context
 This repository is an anonymized version of a professional project. Company names, identifying information, and production data have been removed or replaced for portfolio purposes. The application was originally developed for internal use and is not intended as a publicly deployable product.
