@@ -1,6 +1,6 @@
 # Installing on an Existing Project
 
-It's also possible to use Symfony Docker with existing projects!
+It's also possible to use Symfony Docker with existing projects! 
 
 First, [download this skeleton](https://github.com/dunglas/symfony-docker).
 

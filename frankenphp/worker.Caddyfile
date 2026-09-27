@@ -2,3 +2,4 @@ worker {
 	file ./public/index.php
 	env APP_RUNTIME Runtime\FrankenPhpSymfony\Runtime
 }
+

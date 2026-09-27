@@ -1,7 +1,7 @@
 # Using Alpine Linux Instead of Debian
 
 By default, Symfony Docker uses Debian-based FrankenPHP Docker images.
-This is the recommended solution.
+This is the recommended solution. 
 
 Alternatively, it's possible to use Alpine-based images, which are smaller but
 are known to be slower, and have several known issues.

@@ -9,7 +9,7 @@ You can customize the docker build process using these environment variables.
 
 Use the `SYMFONY_VERSION` environment variable to select a specific Symfony version.
 
-For instance, use the following command to install Symfony 6.4:
+For instance, use the following command to install Symfony 6.4: 
 
 On Linux:
 

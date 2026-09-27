@@ -12,7 +12,7 @@ On Linux and Mac:
 XDEBUG_MODE=debug docker compose up -d
 ```
 
-On Windows:
+On Windows: 
 
 ```
 set XDEBUG_MODE=debug&& docker compose up -d&set XDEBUG_MODE=
