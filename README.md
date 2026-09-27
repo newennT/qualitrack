@@ -1,55 +1,39 @@
-# Accès
-support@solatypic.com
-123456
+# Qualitrack
 
-# Symfony Docker
+## Description
+Qualitrack is an internal web application designed to monitor the compliance of cleaning operations across different sites. The application allows employees to carry out on-site audits, assess individual cleaning operations, document non-compliant results with photos, and send a complete audit report to the site manager.
 
-A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework,
-with [FrankenPHP](https://frankenphp.dev) and [Caddy](https://caddyserver.com/) inside!
-
-![CI](https://github.com/dunglas/symfony-docker/workflows/CI/badge.svg)
-
-## Getting Started
-
-1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/) (v2.10+)
-2. Run `docker compose build --no-cache` to build fresh images
-3. Run `docker compose up --pull always -d --wait` to set up and start a fresh Symfony project
-4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-5. Run `docker compose down --remove-orphans` to stop the Docker containers.
+Qualitrack was developed as an internal business application to provide a structured and traceable way of monitoring cleaning quality. The application replaces a more manual audit process with a centralized digital workflow, making it easier to document issues, calculate compliance results, and communicate them to the people responsible for each site.
 
 ## Features
+- Site : Select a site and carry out a structured audit of its cleaning operations.
+- Operation compliance : Mark each operation as compliant or non-compliant.
+- Photo evidence : Attach a photo to document non-compliant cleaning operations.
+- Compliance score : Automatically calculate an overall compliance score at the end of the audit.
+- Audit reports : Send the completed audit and its results to the site manager.
+- Audit history : Keep track of completed audits and their results.
+-
 
-* Production, development and CI ready
-* Just 1 service by default
-* Blazing-fast performance thanks to [the worker mode of FrankenPHP](https://github.com/dunglas/frankenphp/blob/main/docs/worker.md) (automatically enabled in prod mode)
-* [Installation of extra Docker Compose services](docs/extra-services.md) with Symfony Flex
-* Automatic HTTPS (in dev and prod)
-* HTTP/3 and [Early Hints](https://symfony.com/blog/new-in-symfony-6-3-early-hints) support
-* Real-time messaging thanks to a built-in [Mercure hub](https://symfony.com/doc/current/mercure.html)
-* [Vulcain](https://vulcain.rocks) support
-* Native [XDebug](docs/xdebug.md) integration
-* Super-readable configuration
+## Audit workflow
+1. The employee selects the site to audit.
+2. Each cleaning operation is reviewed individually.
+3. The employee marks the operation as compliant or non-compliant.
+4. When an operation is non-compliant, a photo can be added as evidence.
+5. Once all operations have been reviewed, Qualitrack calculates the site's overall compliance score.
+6. The completed audit is sent to the site manager.
 
-**Enjoy!**
+## Technologies
 
-## Docs
 
-1. [Options available](docs/options.md)
-2. [Using Symfony Docker with an existing project](docs/existing-project.md)
-3. [Support for extra services](docs/extra-services.md)
-4. [Deploying in production](docs/production.md)
-5. [Debugging with Xdebug](docs/xdebug.md)
-6. [TLS Certificates](docs/tls.md)
-7. [Using MySQL instead of PostgreSQL](docs/mysql.md)
-8. [Using Alpine Linux instead of Debian](docs/alpine.md)
-9. [Using a Makefile](docs/makefile.md)
-10. [Updating the template](docs/updating.md)
-11. [Troubleshooting](docs/troubleshooting.md)
 
-## License
 
-Symfony Docker is available under the MIT License.
+## Getting Started
+- Clone repo `git clone https://github.com/newennT/qualitrack.git`
+- `cd qualitrack`
+- Run `docker compose build --no-cache` to build fresh images
+- Run `docker compose up --pull always -d --wait` to set up and start a fresh Symfony project
 
-## Credits
 
-Created by [Kévin Dunglas](https://dunglas.dev), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+
+
+
