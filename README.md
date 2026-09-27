@@ -30,6 +30,8 @@ Administrators can perform full CRUD operations (Create, Read, Update, Delete) o
 - Open Docker
 - Run `docker compose build --no-cache` to build fresh images
 - Run `docker compose up --pull always -d --wait` to set up 
+- Run `npm install` and `npm run build` to compile assets
+- Run `php bin/console doctrine:fixtures:load` to load fixtures
 
 ## Technologies
 - Symfony : application framework
@@ -40,6 +42,8 @@ Administrators can perform full CRUD operations (Create, Read, Update, Delete) o
 - SQL : relational data storage
 - JavaScript : dynamic behavior
 - Sass : styling and CSS preprocessing
+
+## Test
 
 ## Context
 This repository is an anonymized version of a professional project. Company names, identifying information, and production data have been removed or replaced for portfolio purposes. The application was originally developed for internal use and is not intended as a publicly deployable product.
